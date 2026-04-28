@@ -88,6 +88,10 @@ export class AuthService {
         relations: ['patient', 'doctor'],
       });
 
+      if (!savedUser) {
+        throw new Error('User not found after creation');
+      }
+
       const payload = { sub: savedUser.id_user, email: savedUser.email, role: savedUser.role };
       const token = this.jwtService.sign(payload);
 

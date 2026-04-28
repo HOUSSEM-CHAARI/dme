@@ -12,11 +12,11 @@
     "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": ["./*"],
       "@auth/*": ["./auth/*"],
@@ -28,6 +28,8 @@
       "@analyses/*": ["./analyses/*"],
       "@documents/*": ["./documents/*"],
       "@reports/*": ["./reports/*"],
+      "@chronic-diseases/*": ["./chronic-diseases/*"],
+      "@staff/*": ["./staff/*"],
       "@common/*": ["./common/*"]
     }
   }
