@@ -9,7 +9,7 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -18,19 +18,19 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["./*"],
-      "@auth/*": ["./auth/*"],
-      "@users/*": ["./users/*"],
-      "@patients/*": ["./patients/*"],
-      "@doctors/*": ["./doctors/*"],
-      "@medical-records/*": ["./medical-records/*"],
-      "@prescriptions/*": ["./prescriptions/*"],
-      "@analyses/*": ["./analyses/*"],
-      "@documents/*": ["./documents/*"],
-      "@reports/*": ["./reports/*"],
-      "@chronic-diseases/*": ["./chronic-diseases/*"],
-      "@staff/*": ["./staff/*"],
-      "@common/*": ["./common/*"]
+      "@/*": ["./src/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@users/*": ["./src/users/*"],
+      "@patients/*": ["./src/patients/*"],
+      "@doctors/*": ["./src/doctors/*"],
+      "@medical-records/*": ["./src/medical-records/*"],
+      "@prescriptions/*": ["./src/prescriptions/*"],
+      "@analyses/*": ["./src/analyses/*"],
+      "@documents/*": ["./src/documents/*"],
+      "@reports/*": ["./src/reports/*"],
+      "@chronic-diseases/*": ["./src/chronic-diseases/*"],
+      "@staff/*": ["./src/staff/*"],
+      "@common/*": ["./src/common/*"]
     }
   }
 }
