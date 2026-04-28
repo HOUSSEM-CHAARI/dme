@@ -1,6 +1,6 @@
 import {
-  Controller, Get, Post, Put, Body, Param, Query,
-  UseGuards, Req, ParseIntPipe, UseInterceptors, UploadedFile, Res, NotFoundException
+  Controller, Get, Post, Put, Delete, Body, Param, Query,
+  UseGuards, Req, ParseIntPipe, UseInterceptors, UploadedFile, Res, NotFoundException, ForbiddenException
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -133,12 +133,12 @@ export class PatientsController {
   // === DOCUMENTS ===
   @Get(':id/documents')
   @Roles(UserRole.DOCTOR, UserRole.STAFF, UserRole.PATIENT)
-  getDocuments(@Param('id', ParseIntPipe) id: number) {
-    return this.documentsService.findByPatient(id);
+  getDocuments(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
+    return this.documentsService.findByPatient(id, req.user);
   }
 
   @Post(':id/documents')
-  @Roles(UserRole.DOCTOR, UserRole.STAFF)
+  @Roles(UserRole.DOCTOR, UserRole.STAFF, UserRole.PATIENT)
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: (req, file, cb) => {
@@ -186,6 +186,50 @@ export class PatientsController {
       throw new NotFoundException('Fichier introuvable sur le serveur');
     }
     return res.download(document.file_path, document.name);
+  }
+
+  @Delete(':id/documents/:documentId')
+  @Roles(UserRole.DOCTOR, UserRole.STAFF)
+  async deleteDocument(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('documentId', ParseIntPipe) documentId: number,
+  ) {
+    const document = await this.documentsService.findOne(documentId);
+    if (!document || document.patient.id_patient !== id) {
+      throw new NotFoundException('Document non trouvé');
+    }
+    // Delete file from disk
+    if (fs.existsSync(document.file_path)) {
+      fs.unlinkSync(document.file_path);
+    }
+    return this.documentsService.delete(documentId);
+  }
+
+  // === PRESCRIPTIONS DELETE ===
+  @Delete(':id/prescriptions/:prescriptionId')
+  @Roles(UserRole.DOCTOR)
+  deletePrescription(
+    @Param('prescriptionId', ParseIntPipe) prescriptionId: number,
+  ) {
+    return this.prescriptionsService.delete(prescriptionId);
+  }
+
+  // === MEDICAL RECORDS DELETE ===
+  @Delete(':id/records/:recordId')
+  @Roles(UserRole.DOCTOR)
+  deleteRecord(
+    @Param('recordId', ParseIntPipe) recordId: number,
+  ) {
+    return this.medicalRecordsService.delete(recordId);
+  }
+
+  // === ANALYSES DELETE ===
+  @Delete(':id/analyses/:analysisId')
+  @Roles(UserRole.DOCTOR)
+  deleteAnalysis(
+    @Param('analysisId', ParseIntPipe) analysisId: number,
+  ) {
+    return this.analysesService.delete(analysisId);
   }
 
   // === REPORTS ===

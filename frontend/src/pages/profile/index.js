@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AppLayout } from '../../components/layout';
-import { Card, Input, Button, Alert, Avatar } from '../../components/ui';
+import { Card, Input, Button, Alert, Avatar, Select, Textarea } from '../../components/ui';
 import { useAuth } from '../../context/AuthContext';
 import { authAPI } from '../../api';
 
@@ -26,10 +26,12 @@ export function ProfilePage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (user.role === 'patient') {
+    if (user.role === 'patient' && profile?.patient) {
       setProfile({ ...profile, patient: { ...profile.patient, [name]: value } });
-    } else if (user.role === 'doctor') {
+    } else if (user.role === 'doctor' && profile?.doctor) {
       setProfile({ ...profile, doctor: { ...profile.doctor, [name]: value } });
+    } else if (user.role === 'staff' && profile?.staff) {
+      setProfile({ ...profile, staff: { ...profile.staff, [name]: value } });
     }
   };
 
@@ -77,18 +79,53 @@ export function ProfilePage() {
           </div>
 
           {user.role === 'patient' && profile?.patient && (
-            <div style={{ marginBottom: 20 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, borderBottom: '1px solid #eee', paddingBottom: 8 }}>Informations personnelles</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
-                <Input label="Prénom" name="first_name" value={profile.patient.first_name || ''} onChange={handleChange} required />
-                <Input label="Nom" name="last_name" value={profile.patient.last_name || ''} onChange={handleChange} required />
+            <>
+              <div style={{ marginBottom: 20 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, borderBottom: '1px solid #eee', paddingBottom: 8 }}>Informations personnelles</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+                  <Input label="Prénom" name="first_name" value={profile.patient.first_name || ''} onChange={handleChange} required />
+                  <Input label="Nom" name="last_name" value={profile.patient.last_name || ''} onChange={handleChange} required />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0 16px' }}>
+                  <Input label="Date de naissance" name="dob" type="date" value={profile.patient.dob || ''} onChange={handleChange} />
+                  <Input label="CIN" name="cin" value={profile.patient.cin || ''} onChange={handleChange} />
+                  <Select label="Genre" name="gender" value={profile.patient.gender || ''} onChange={handleChange}>
+                    <option value="">Sélectionner...</option>
+                    <option value="male">Homme</option>
+                    <option value="female">Femme</option>
+                    <option value="other">Autre</option>
+                  </Select>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+                  <Input label="Téléphone" name="phone_number" type="tel" value={profile.patient.phone_number || ''} onChange={handleChange} />
+                  <Input label="Adresse" name="address" value={profile.patient.address || ''} onChange={handleChange} />
+                </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
-                <Input label="Date de naissance" name="dob" type="date" value={profile.patient.dob || ''} onChange={handleChange} />
-                <Input label="Téléphone" name="phone_number" type="tel" value={profile.patient.phone_number || ''} onChange={handleChange} />
+
+              <div style={{ marginBottom: 20 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, borderBottom: '1px solid #eee', paddingBottom: 8 }}>Contact d'urgence</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+                  <Input label="Nom du contact" name="emergency_contact" value={profile.patient.emergency_contact || ''} onChange={handleChange} />
+                  <Input label="Téléphone du contact" name="emergency_contact_phone" type="tel" value={profile.patient.emergency_contact_phone || ''} onChange={handleChange} />
+                </div>
               </div>
-              <Input label="Adresse" name="address" value={profile.patient.address || ''} onChange={handleChange} />
-            </div>
+
+              <div style={{ marginBottom: 20 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, borderBottom: '1px solid #eee', paddingBottom: 8 }}>Informations médicales</h3>
+                <Select label="Groupe sanguin" name="blood_type" value={profile.patient.blood_type || ''} onChange={handleChange}>
+                  <option value="">Sélectionner...</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </Select>
+                <Textarea label="Allergies" name="allergies" value={profile.patient.allergies || ''} onChange={handleChange} rows={2} placeholder="Séparez les allergies par des virgules" />
+              </div>
+            </>
           )}
 
           {user.role === 'doctor' && profile?.doctor && (

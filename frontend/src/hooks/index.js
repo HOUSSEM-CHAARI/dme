@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { patientsAPI, reportsAPI } from '../api';
+import { patientsAPI, reportsAPI, chronicDiseasesAPI } from '../api';
 
 // Generic fetch hook
 export function useFetch(fetcher, deps = []) {
@@ -64,6 +64,16 @@ export function useDocuments(patientId) {
 // Dashboard stats
 export function useDashboardStats() {
   return useFetch(() => reportsAPI.getStats(), []);
+}
+
+// My chronic diseases (patient)
+export function useMyChronicDiseases() {
+  return useFetch(() => chronicDiseasesAPI.getMy(), []);
+}
+
+// Chronic diseases for a patient
+export function useChronicDiseases(patientId) {
+  return useFetch(() => chronicDiseasesAPI.getByPatient(patientId), [patientId]);
 }
 
 // Mutation hook for POST/PUT operations

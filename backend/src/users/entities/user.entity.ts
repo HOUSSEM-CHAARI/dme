@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Patient } from '../../patients/entities/patient.entity';
 import { Doctor } from '../../doctors/entities/doctor.entity';
+import { Staff } from '../../staff/entities/staff.entity';
 
 export enum UserRole {
   PATIENT = 'patient',
@@ -29,6 +30,9 @@ export class User {
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 
+  @Column({ default: true })
+  is_active: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 
@@ -40,4 +44,7 @@ export class User {
 
   @OneToOne(() => Doctor, (doctor) => doctor.user, { nullable: true })
   doctor: Doctor;
+
+  @OneToOne(() => Staff, (staff) => staff.user, { nullable: true })
+  staff: Staff;
 }

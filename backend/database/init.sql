@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   email         VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   role          ENUM('patient', 'doctor', 'staff') NOT NULL,
+  is_active     BOOLEAN DEFAULT TRUE,
   created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_email (email),
@@ -31,27 +32,53 @@ CREATE TABLE IF NOT EXISTS doctors (
   specialization       VARCHAR(150),
   license_number       VARCHAR(100),
   hospital_affiliation VARCHAR(200),
+  created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
   INDEX idx_doctor_user (id_user)
+) ENGINE=InnoDB;
+
+-- =====================
+-- STAFF
+-- =====================
+CREATE TABLE IF NOT EXISTS staff (
+  id_staff    INT AUTO_INCREMENT PRIMARY KEY,
+  id_user     INT NOT NULL UNIQUE,
+  first_name  VARCHAR(100),
+  last_name   VARCHAR(100),
+  position    VARCHAR(100),
+  department  VARCHAR(100),
+  phone       VARCHAR(30),
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+  INDEX idx_staff_user (id_user)
 ) ENGINE=InnoDB;
 
 -- =====================
 -- PATIENTS
 -- =====================
 CREATE TABLE IF NOT EXISTS patients (
-  id_patient       INT AUTO_INCREMENT PRIMARY KEY,
-  id_user          INT NOT NULL UNIQUE,
-  first_name       VARCHAR(100) NOT NULL,
-  last_name        VARCHAR(100) NOT NULL,
-  dob              DATE,
-  phone_number     VARCHAR(30),
-  address          TEXT,
-  blood_type       VARCHAR(10),
-  allergies        TEXT,
-  chronic_diseases TEXT,
+  id_patient             INT AUTO_INCREMENT PRIMARY KEY,
+  id_user                INT NOT NULL UNIQUE,
+  first_name             VARCHAR(100) NOT NULL,
+  last_name              VARCHAR(100) NOT NULL,
+  dob                    DATE,
+  phone_number           VARCHAR(30),
+  address                TEXT,
+  blood_type             VARCHAR(10),
+  allergies              TEXT,
+  chronic_diseases       TEXT,
+  cin                    VARCHAR(50) UNIQUE,
+  gender                 ENUM('male', 'female', 'other'),
+  emergency_contact      VARCHAR(200),
+  emergency_contact_phone VARCHAR(30),
+  created_at             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at             TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
   INDEX idx_patient_user (id_user),
-  INDEX idx_patient_name (last_name, first_name)
+  INDEX idx_patient_name (last_name, first_name),
+  INDEX idx_patient_cin (cin)
 ) ENGINE=InnoDB;
 
 -- =====================
@@ -128,6 +155,24 @@ CREATE TABLE IF NOT EXISTS documents (
   INDEX idx_document_patient (id_patient)
 ) ENGINE=InnoDB;
 
+-- =====================
+-- CHRONIC DISEASES
+-- =====================
+CREATE TABLE IF NOT EXISTS chronic_diseases (
+  id_chronic_disease INT AUTO_INCREMENT PRIMARY KEY,
+  id_patient         INT NOT NULL,
+  disease_name       VARCHAR(255) NOT NULL,
+  description        TEXT,
+  diagnosed_at       DATE,
+  severity           VARCHAR(50),
+  current_treatment  TEXT,
+  notes              TEXT,
+  created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_patient) REFERENCES patients(id_patient) ON DELETE CASCADE,
+  INDEX idx_chronic_patient (id_patient)
+) ENGINE=InnoDB;
+
 -- =========================================
 -- SEED DATA (development only)
 -- =========================================
@@ -135,20 +180,23 @@ CREATE TABLE IF NOT EXISTS documents (
 -- Password for all seed users: "Password123!"
 -- Hash generated with bcrypt rounds=12
 
-INSERT INTO users (email, password_hash, role) VALUES
-  ('doctor@dme.fr',  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'doctor'),
-  ('patient@dme.fr', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'patient'),
-  ('staff@dme.fr',   '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'staff'),
-  ('marie.dupont@dme.fr', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'patient'),
-  ('jean.martin@dme.fr',  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'patient');
+INSERT INTO users (email, password_hash, role, is_active) VALUES
+  ('doctor@dme.fr',  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'doctor', TRUE),
+  ('patient@dme.fr', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'patient', TRUE),
+  ('staff@dme.fr',   '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'staff', TRUE),
+  ('marie.dupont@dme.fr', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'patient', TRUE),
+  ('jean.martin@dme.fr',  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeOBWATPuHBH1z4/6', 'patient', TRUE);
 
 INSERT INTO doctors (id_user, first_name, last_name, specialization, license_number, hospital_affiliation) VALUES
   (1, 'Martin', 'Dupont', 'Médecine générale', 'MED-2024-001', 'Hôpital Saint-Louis Paris');
 
-INSERT INTO patients (id_user, first_name, last_name, dob, phone_number, address, blood_type, allergies, chronic_diseases) VALUES
-  (2, 'Test',   'Patient',  '1990-01-01', '+33600000001', '1 rue Test, Paris',           'O+',  NULL,          NULL),
-  (4, 'Marie',  'Dupont',   '1968-05-12', '+33612345678', '12 rue des Lilas, Paris',     'A+',  'Pénicilline', 'Hypertension artérielle,Diabète de type 2'),
-  (5, 'Jean',   'Martin',   '1975-11-23', '+33745678901', '5 avenue Victor Hugo, Lyon',  'O+',  NULL,          'Asthme');
+INSERT INTO staff (id_user, first_name, last_name, position, department, phone) VALUES
+  (3, 'Admin', 'Staff', 'Secrétaire médical', 'Administration', '+33600000003');
+
+INSERT INTO patients (id_user, first_name, last_name, dob, phone_number, address, blood_type, allergies, chronic_diseases, cin, gender, emergency_contact, emergency_contact_phone) VALUES
+  (2, 'Test',   'Patient',  '1990-01-01', '+33600000001', '1 rue Test, Paris',           'O+',  NULL,          NULL, 'CIN123456', 'male', 'Jean Patient', '+33600000002'),
+  (4, 'Marie',  'Dupont',   '1968-05-12', '+33612345678', '12 rue des Lilas, Paris',     'A+',  'Pénicilline', 'Hypertension artérielle,Diabète de type 2', 'CIN789012', 'female', 'Pierre Dupont', '+33612345679'),
+  (5, 'Jean',   'Martin',   '1975-11-23', '+33745678901', '5 avenue Victor Hugo, Lyon',  'O+',  NULL,          'Asthme', 'CIN345678', 'male', 'Sophie Martin', '+33745678902');
 
 INSERT INTO medical_records (id_patient, diagnosis, treatment, doctor_name, visit_reason, status) VALUES
   (2, 'Hypertension artérielle stade 1', 'Amlodipine 5mg 1x/jour + régime hyposodé', 'Dr. Martin Dupont', 'Contrôle régulier', 'completed'),
@@ -171,3 +219,8 @@ INSERT INTO documents (id_patient, name, file_type, file_size, added_by) VALUES
   (2, 'Ordonnance - 12/05/2024',    'PDF',   '88 ko',  'Dr. Martin Dupont'),
   (2, 'Analyse de sang - 10/05/2024', 'PDF', '245 ko', 'Laboratoire'),
   (2, 'Radiographie - 02/05/2024',  'Image', '1.2 Mo', 'Service imagerie');
+
+INSERT INTO chronic_diseases (id_patient, disease_name, description, diagnosed_at, severity, current_treatment, notes) VALUES
+  (2, 'Hypertension artérielle', 'Tension artérielle élevée nécessitant un traitement quotidien', '2020-03-15', 'Modérée', 'Amlodipine 5mg 1x/jour', 'Surveillance régulière recommandée'),
+  (2, 'Diabète de type 2', 'Diabète diagnostiqué suite à une hyperglycémie persistante', '2018-06-20', 'Contrôlé', 'Metformine 850mg 2x/jour, régime alimentaire', 'HbA1c à surveiller tous les 3 mois'),
+  (3, 'Asthme', 'Asthme allergique léger', '2010-09-10', 'Léger', 'Salbutamol en cas de crise', 'Éviter les allergènes connus');

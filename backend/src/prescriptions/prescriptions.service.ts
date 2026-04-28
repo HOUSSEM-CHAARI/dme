@@ -61,4 +61,11 @@ export class PrescriptionsService {
     await this.prescriptionRepo.update(id, data);
     return this.prescriptionRepo.findOne({ where: { id_prescription: id }, relations: ['doctor'] });
   }
+
+  async delete(id: number): Promise<{ message: string }> {
+    const prescription = await this.prescriptionRepo.findOne({ where: { id_prescription: id } });
+    if (!prescription) throw new NotFoundException('Ordonnance non trouvée');
+    await this.prescriptionRepo.delete(id);
+    return { message: 'Ordonnance supprimée' };
+  }
 }

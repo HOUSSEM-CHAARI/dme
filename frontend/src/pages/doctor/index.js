@@ -137,6 +137,7 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
   const [showAddPrescription, setShowAddPrescription] = useState(false);
   const [showAddAnalysis, setShowAddAnalysis] = useState(false);
   const [showAddDocument, setShowAddDocument] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(null);
   const navigate = useNavigate();
 
   const { data: patient, loading } = usePatient(patientId);
@@ -157,6 +158,58 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
       link.parentNode.removeChild(link);
     } catch (err) {
       alert("Erreur lors du téléchargement du fichier.");
+    }
+  };
+
+  const handleDeleteRecord = async (recordId) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette consultation ?')) return;
+    setDeleteLoading(`record-${recordId}`);
+    try {
+      await patientsAPI.deleteRecord(patientId, recordId);
+      refetchRecords();
+    } catch (err) {
+      alert("Erreur lors de la suppression.");
+    } finally {
+      setDeleteLoading(null);
+    }
+  };
+
+  const handleDeletePrescription = async (prescriptionId) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette ordonnance ?')) return;
+    setDeleteLoading(`prescription-${prescriptionId}`);
+    try {
+      await patientsAPI.deletePrescription(patientId, prescriptionId);
+      refetchPrescriptions();
+    } catch (err) {
+      alert("Erreur lors de la suppression.");
+    } finally {
+      setDeleteLoading(null);
+    }
+  };
+
+  const handleDeleteAnalysis = async (analysisId) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette analyse ?')) return;
+    setDeleteLoading(`analysis-${analysisId}`);
+    try {
+      await patientsAPI.deleteAnalysis(patientId, analysisId);
+      refetchAnalyses();
+    } catch (err) {
+      alert("Erreur lors de la suppression.");
+    } finally {
+      setDeleteLoading(null);
+    }
+  };
+
+  const handleDeleteDocument = async (documentId) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) return;
+    setDeleteLoading(`document-${documentId}`);
+    try {
+      await patientsAPI.deleteDocument(patientId, documentId);
+      refetchDocuments();
+    } catch (err) {
+      alert("Erreur lors de la suppression.");
+    } finally {
+      setDeleteLoading(null);
     }
   };
 
@@ -256,6 +309,11 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
                     {r.status === 'completed' ? 'Terminée' : r.status === 'in_progress' ? 'En cours' : 'Planifiée'}
                   </Badge>
                   <span style={{ fontSize: 12, color: '#999' }}>{new Date(r.created_at).toLocaleDateString('fr-FR')}</span>
+                  {role === 'doctor' && (
+                    <Button size="sm" variant="danger" onClick={() => handleDeleteRecord(r.id_record)} loading={deleteLoading === `record-${r.id_record}`}>
+                      🗑
+                    </Button>
+                  )}
                 </div>
               </div>
               {r.diagnosis && <p style={{ fontSize: 13, color: '#1a1a1a', marginBottom: 4 }}><strong>Diagnostic :</strong> {r.diagnosis}</p>}
@@ -284,9 +342,16 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
                   {p.instructions && <div style={{ fontSize: 13, color: '#6b6b6b', marginTop: 4 }}>Instructions : {p.instructions}</div>}
                   <div style={{ fontSize: 12, color: '#bbb', marginTop: 8 }}>Prescrit le {p.prescribed_on} {p.doctor && `par Dr. ${p.doctor.first_name} ${p.doctor.last_name}`}</div>
                 </div>
-                <Badge variant={p.status === 'active' ? 'green' : p.status === 'expired' ? 'gray' : 'red'}>
-                  {p.status === 'active' ? 'Active' : p.status === 'expired' ? 'Expirée' : 'Annulée'}
-                </Badge>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Badge variant={p.status === 'active' ? 'green' : p.status === 'expired' ? 'gray' : 'red'}>
+                    {p.status === 'active' ? 'Active' : p.status === 'expired' ? 'Expirée' : 'Annulée'}
+                  </Badge>
+                  {role === 'doctor' && (
+                    <Button size="sm" variant="danger" onClick={() => handleDeletePrescription(p.id_prescription)} loading={deleteLoading === `prescription-${p.id_prescription}`}>
+                      🗑
+                    </Button>
+                  )}
+                </div>
               </div>
             </Card>
           ))}
@@ -306,7 +371,7 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-                  {['Date', 'Examen', 'Résultat', 'Référence', 'Statut'].map(h => (
+                  {['Date', 'Examen', 'Résultat', 'Référence', 'Statut', ...(role === 'doctor' ? ['Actions'] : [])].map(h => (
                     <th key={h} style={{ textAlign: 'left', fontSize: 12, fontWeight: 500, color: '#6b6b6b', paddingBottom: 10, paddingRight: 16 }}>{h}</th>
                   ))}
                 </tr>
@@ -323,6 +388,13 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
                         {a.status === 'normal' ? 'Normal' : a.status === 'elevated' ? 'Élevé' : a.status === 'low' ? 'Bas' : 'En attente'}
                       </Badge>
                     </td>
+                    {role === 'doctor' && (
+                      <td>
+                        <Button size="sm" variant="danger" onClick={() => handleDeleteAnalysis(a.id_analysis)} loading={deleteLoading === `analysis-${a.id_analysis}`}>
+                          🗑
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -351,6 +423,11 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
               </div>
               <Badge variant={d.file_type === 'PDF' ? 'red' : 'blue'}>{d.file_type}</Badge>
               <Button size="sm" variant="secondary" onClick={() => handleDownload(d.id_document, d.name)}>⬇ Télécharger</Button>
+              {(role === 'doctor' || role === 'staff') && (
+                <Button size="sm" variant="danger" onClick={() => handleDeleteDocument(d.id_document)} loading={deleteLoading === `document-${d.id_document}`}>
+                  🗑
+                </Button>
+              )}
             </div>
           ))}
         </Card>
@@ -368,7 +445,7 @@ export function PatientDossierPage({ patientId, role = 'doctor' }) {
 // ─── Add Record Modal ────────────────────────────────────────
 function AddRecordModal({ open, onClose, patientId, onSuccess }) {
   const [form, setForm] = useState({ visit_reason: '', diagnosis: '', treatment: '', status: 'completed' });
-  const { mutate, loading, error, success } = useMutation(useCallback((data) => patientsAPI.addRecord(patientId, data), [patientId]));
+  const { mutate, loading, error } = useMutation(useCallback((data) => patientsAPI.addRecord(patientId, data), [patientId]));
   const handle = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
 
   const submit = async () => {
@@ -556,12 +633,9 @@ export function ReportsPage() {
             ? <EmptyState icon="📊" title="Aucun rapport généré" message="Sélectionnez un patient et générez un rapport." />
             : (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-                <div>
-                  <div style={{ fontWeight: 600 }}>{report.patient.name}</div>
-                  <div style={{ fontSize: 12, color: '#999' }}>Généré le {new Date(report.generated_at).toLocaleString('fr-FR')}</div>
-                </div>
-                <Button size="sm" variant="secondary">⬇ Télécharger PDF</Button>
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontWeight: 600 }}>{report.patient.name}</div>
+                <div style={{ fontSize: 12, color: '#999' }}>Généré le {new Date(report.generated_at).toLocaleString('fr-FR')}</div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 {report.medical_records && <div style={{ background: '#f5f6fa', borderRadius: 8, padding: '10px 14px', fontSize: 13 }}><strong>{report.medical_records.length}</strong> consultations</div>}
@@ -578,7 +652,22 @@ export function ReportsPage() {
 
 // ─── Create Patient Page ────────────────────────────────────────
 export function CreatePatientPage() {
-  const [form, setForm] = useState({ first_name: '', last_name: '', dob: '', phone_number: '', address: '', blood_type: '', allergies: '', chronic_diseases: '' });
+  const [form, setForm] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    dob: '',
+    phone_number: '',
+    address: '',
+    blood_type: '',
+    allergies: '',
+    chronic_diseases: '',
+    cin: '',
+    gender: '',
+    emergency_contact: '',
+    emergency_contact_phone: '',
+  });
   const { mutate, loading, error } = useMutation(useCallback((data) => patientsAPI.create(data), []));
   const navigate = useNavigate();
 
@@ -586,35 +675,72 @@ export function CreatePatientPage() {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.first_name || !form.last_name) return;
-    const res = await mutate(form);
-    if (res && res.id_patient) {
-      navigate(`/patients/${res.id_patient}`);
-    } else {
-      navigate('/patients');
+    if (!form.first_name || !form.last_name || !form.email) return;
+    try {
+      const res = await mutate(form);
+      if (res && res.id_patient) {
+        navigate(`/patients/${res.id_patient}`);
+      } else {
+        navigate('/patients');
+      }
+    } catch (err) {
+      // Error handled by useMutation
     }
   };
 
   return (
     <AppLayout title="Nouveau Patient">
-      <Card style={{ maxWidth: 600, margin: '0 auto' }}>
+      <Card style={{ maxWidth: 700, margin: '0 auto' }}>
         <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 20 }}>Créer un dossier patient</h2>
         {error && <Alert variant="error">{error}</Alert>}
         <form onSubmit={submit}>
+          {/* Account Information */}
+          <div style={{ marginBottom: 16, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 600 }}>Informations de compte</h3>
+            <p style={{ fontSize: 12, color: '#6b6b6b', marginTop: 4 }}>Le patient pourra se connecter avec ces identifiants</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+            <Input label="Email *" type="email" value={form.email} onChange={handle('email')} placeholder="patient@email.com" required />
+            <Input label="Mot de passe" type="password" value={form.password} onChange={handle('password')} placeholder="Par défaut: Password123!" />
+          </div>
+
+          {/* Personal Information */}
+          <div style={{ marginTop: 24, marginBottom: 16, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 600 }}>Informations personnelles</h3>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
             <Input label="Prénom *" value={form.first_name} onChange={handle('first_name')} required />
             <Input label="Nom *" value={form.last_name} onChange={handle('last_name')} required />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0 16px' }}>
             <Input label="Date de naissance" type="date" value={form.dob} onChange={handle('dob')} />
-            <Input label="Téléphone" type="tel" value={form.phone_number} onChange={handle('phone_number')} />
+            <Input label="CIN" value={form.cin} onChange={handle('cin')} placeholder="Numéro CIN" />
+            <Select label="Genre" value={form.gender} onChange={handle('gender')}>
+              <option value="">Sélectionner...</option>
+              <option value="male">Homme</option>
+              <option value="female">Femme</option>
+              <option value="other">Autre</option>
+            </Select>
           </div>
-          <Input label="Adresse" value={form.address} onChange={handle('address')} />
-          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+            <Input label="Téléphone" type="tel" value={form.phone_number} onChange={handle('phone_number')} />
+            <Input label="Adresse" value={form.address} onChange={handle('address')} />
+          </div>
+
+          {/* Emergency Contact */}
+          <div style={{ marginTop: 24, marginBottom: 16, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 600 }}>Contact d'urgence</h3>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>
+            <Input label="Nom du contact" value={form.emergency_contact} onChange={handle('emergency_contact')} placeholder="Ex: Marie Dupont" />
+            <Input label="Téléphone du contact" type="tel" value={form.emergency_contact_phone} onChange={handle('emergency_contact_phone')} />
+          </div>
+
+          {/* Medical Information */}
           <div style={{ marginTop: 24, marginBottom: 16, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
             <h3 style={{ fontSize: 16, fontWeight: 600 }}>Informations médicales</h3>
           </div>
-          
+
           <Select label="Groupe sanguin" value={form.blood_type} onChange={handle('blood_type')}>
             <option value="">Sélectionner...</option>
             <option value="A+">A+</option>
@@ -628,7 +754,7 @@ export function CreatePatientPage() {
           </Select>
           <Textarea label="Allergies (séparées par des virgules)" placeholder="Ex: Pénicilline, Arachides" value={form.allergies} onChange={handle('allergies')} rows={2} />
           <Textarea label="Maladies chroniques (séparées par des virgules)" placeholder="Ex: Diabète, Hypertension" value={form.chronic_diseases} onChange={handle('chronic_diseases')} rows={2} />
-          
+
           <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 24 }}>
             <Button variant="secondary" type="button" onClick={() => navigate('/patients')}>Annuler</Button>
             <Button type="submit" loading={loading}>Créer le patient</Button>

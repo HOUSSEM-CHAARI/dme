@@ -2,13 +2,37 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PatientsService } from './patients.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Patient } from './entities/patient.entity';
+import { User } from '../users/entities/user.entity';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
 import { UserRole } from '../users/entities/user.entity';
+import { DataSource } from 'typeorm';
 
 const mockPatientRepo = {
   find: jest.fn(),
   findOne: jest.fn(),
   update: jest.fn(),
+  create: jest.fn(),
+  save: jest.fn(),
+};
+
+const mockUserRepo = {
+  findOne: jest.fn(),
+  create: jest.fn(),
+  save: jest.fn(),
+};
+
+const mockDataSource = {
+  createQueryRunner: jest.fn().mockReturnValue({
+    connect: jest.fn(),
+    startTransaction: jest.fn(),
+    commitTransaction: jest.fn(),
+    rollbackTransaction: jest.fn(),
+    release: jest.fn(),
+    manager: {
+      create: jest.fn(),
+      save: jest.fn(),
+    },
+  }),
 };
 
 const mockPatients = [
@@ -24,6 +48,8 @@ describe('PatientsService', () => {
       providers: [
         PatientsService,
         { provide: getRepositoryToken(Patient), useValue: mockPatientRepo },
+        { provide: getRepositoryToken(User), useValue: mockUserRepo },
+        { provide: DataSource, useValue: mockDataSource },
       ],
     }).compile();
 

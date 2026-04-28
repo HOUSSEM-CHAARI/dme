@@ -65,6 +65,12 @@ export const patientsAPI = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
   downloadDocument: (patientId, documentId) => api.get(`/patients/${patientId}/documents/${documentId}/download`, { responseType: 'blob' }),
+  deleteDocument: (patientId, documentId) => api.delete(`/patients/${patientId}/documents/${documentId}`),
+
+  // Delete operations (doctor only)
+  deleteRecord: (patientId, recordId) => api.delete(`/patients/${patientId}/records/${recordId}`),
+  deletePrescription: (patientId, prescriptionId) => api.delete(`/patients/${patientId}/prescriptions/${prescriptionId}`),
+  deleteAnalysis: (patientId, analysisId) => api.delete(`/patients/${patientId}/analyses/${analysisId}`),
 };
 
 // ── Doctors ───────────────────────────────────────────
@@ -79,6 +85,15 @@ export const reportsAPI = {
   getStats: () => api.get('/reports/stats'),
   getPatientReport: (id, type, startDate, endDate) =>
     api.get(`/reports/patient/${id}`, { params: { type, startDate, endDate } }),
+};
+
+// ── Chronic Diseases ──────────────────────────────────
+export const chronicDiseasesAPI = {
+  getMy: () => api.get('/chronic-diseases/my'),
+  getByPatient: (patientId) => api.get(`/chronic-diseases/patient/${patientId}`),
+  create: (patientId, data) => api.post(`/chronic-diseases/patient/${patientId}`, data),
+  update: (id, data) => api.put(`/chronic-diseases/${id}`, data),
+  delete: (id) => api.delete(`/chronic-diseases/${id}`),
 };
 
 export default api;

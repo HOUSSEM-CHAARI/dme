@@ -52,4 +52,11 @@ export class MedicalRecordsService {
     await this.recordRepo.update(id, data);
     return this.recordRepo.findOne({ where: { id_record: id } });
   }
+
+  async delete(id: number) {
+    const record = await this.recordRepo.findOne({ where: { id_record: id } });
+    if (!record) throw new NotFoundException('Dossier médical non trouvé');
+    await this.recordRepo.delete(id);
+    return { message: 'Consultation supprimée' };
+  }
 }

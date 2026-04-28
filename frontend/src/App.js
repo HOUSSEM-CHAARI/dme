@@ -8,6 +8,7 @@ import { DoctorDashboard, PatientListPage, PatientDossierPage, ReportsPage, Crea
 import { PatientDashboard, PatientDossierView } from './pages/patient';
 import { StaffDashboard } from './pages/staff';
 import { ProfilePage } from './pages/profile';
+import { NotFoundPage, NotAuthorizedPage } from './pages/errors';
 import { Spinner } from './components/ui';
 
 // ── Route guard ─────────────────────────────────────────────
@@ -19,7 +20,7 @@ function ProtectedRoute({ children, roles }) {
     </div>
   );
   if (!user) return <Navigate to="/login" replace />;
-  if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" replace />;
+  if (roles && !roles.includes(user.role)) return <Navigate to="/not-authorized" replace />;
   return children;
 }
 
@@ -73,9 +74,13 @@ export default function App() {
           <Route path="/my-analyses" element={<ProtectedRoute roles={['patient']}><PatientDossierView /></ProtectedRoute>} />
           <Route path="/my-documents" element={<ProtectedRoute roles={['patient']}><PatientDossierView /></ProtectedRoute>} />
 
+          {/* Error pages */}
+          <Route path="/not-authorized" element={<NotAuthorizedPage />} />
+          <Route path="/not-found" element={<NotFoundPage />} />
+
           {/* Fallback */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

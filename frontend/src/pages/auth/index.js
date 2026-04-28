@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Button, Input, Select, Alert } from '../../components/ui';
+import { Button, Input, Alert } from '../../components/ui';
 
 function AuthCard({ children }) {
   return (

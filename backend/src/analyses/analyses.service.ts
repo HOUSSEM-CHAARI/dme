@@ -54,4 +54,11 @@ export class AnalysesService {
     });
     return this.analysisRepo.save(analysis);
   }
+
+  async delete(id: number) {
+    const analysis = await this.analysisRepo.findOne({ where: { id_analysis: id } });
+    if (!analysis) throw new NotFoundException('Analyse non trouvée');
+    await this.analysisRepo.delete(id);
+    return { message: 'Analyse supprimée' };
+  }
 }
