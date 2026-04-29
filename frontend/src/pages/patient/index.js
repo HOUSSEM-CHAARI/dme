@@ -11,23 +11,29 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { patientsAPI, chronicDiseasesAPI } from '../../api';
 
-// Common styles
+// Common styles - Premium SaaS Design
 const styles = {
   pageHeader: {
-    marginBottom: '32px',
+    marginBottom: '28px',
   },
   welcomeDate: {
     color: 'var(--text-secondary)',
-    fontSize: '15px',
+    fontSize: '13px',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '6px',
+    fontWeight: 500,
   },
   welcomeTitle: {
-    fontSize: '28px',
+    fontSize: '26px',
     fontWeight: 700,
     color: 'var(--text-primary)',
-    marginTop: '8px',
+    marginTop: '6px',
+    letterSpacing: '-0.02em',
+    fontFamily: 'var(--font-display)',
+  },
+  welcomeHighlight: {
+    color: 'var(--color-secondary-600)',
   },
   quickActionsGrid: {
     display: 'grid',
@@ -40,10 +46,10 @@ const styles = {
     gap: '12px',
     padding: '16px',
     background: 'var(--bg-primary)',
-    border: '1px solid var(--border-light)',
-    borderRadius: 'var(--radius-lg)',
+    border: '1px solid var(--border-primary)',
+    borderRadius: 'var(--radius-xl)',
     cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
     textAlign: 'left',
     width: '100%',
   },
@@ -54,6 +60,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    transition: 'transform 200ms',
   },
   quickActionText: {
     flex: 1,
@@ -98,16 +105,19 @@ const styles = {
     alignItems: 'center',
     gap: '20px',
     padding: '24px',
-    background: 'linear-gradient(135deg, var(--color-secondary-50) 0%, #ffffff 100%)',
+    background: 'linear-gradient(135deg, var(--color-secondary-50) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%)',
     borderRadius: 'var(--radius-xl)',
-    border: '1px solid var(--border-light)',
+    border: '1px solid var(--border-primary)',
     marginBottom: '24px',
+    boxShadow: 'var(--shadow-sm)',
   },
   profileName: {
-    fontSize: '24px',
+    fontSize: '22px',
     fontWeight: 700,
     color: 'var(--text-primary)',
     marginBottom: '8px',
+    fontFamily: 'var(--font-display)',
+    letterSpacing: '-0.02em',
   },
   profileMeta: {
     fontSize: '14px',
@@ -127,31 +137,35 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '20px',
+    paddingBottom: '14px',
+    borderBottom: '1px solid var(--border-primary)',
   },
   cardTitle: {
-    fontSize: '18px',
+    fontSize: '15px',
     fontWeight: 600,
     color: 'var(--text-primary)',
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    fontFamily: 'var(--font-display)',
   },
   prescriptionCard: {
-    padding: '20px',
+    padding: '18px',
     background: 'var(--bg-primary)',
     borderRadius: 'var(--radius-lg)',
-    border: '1px solid var(--border-light)',
+    border: '1px solid var(--border-primary)',
     marginBottom: '12px',
-    transition: 'box-shadow 0.2s ease',
+    transition: 'all 200ms',
   },
   medicationName: {
-    fontSize: '17px',
+    fontSize: '15px',
     fontWeight: 600,
     color: 'var(--text-primary)',
     marginBottom: '8px',
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    fontFamily: 'var(--font-display)',
   },
   dosageInfo: {
     display: 'flex',
@@ -314,7 +328,7 @@ export function PatientDashboard() {
           {today.charAt(0).toUpperCase() + today.slice(1)}
         </p>
         <h2 style={styles.welcomeTitle}>
-          Bienvenue, <span style={{ color: 'var(--color-secondary-600)' }}>{user?.name}</span>
+          Bienvenue, <span style={styles.welcomeHighlight}>{user?.name}</span>
         </h2>
       </div>
 

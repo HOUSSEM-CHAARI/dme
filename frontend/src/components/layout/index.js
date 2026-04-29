@@ -31,21 +31,21 @@ const QUICK_ACTIONS = {
   patient: [],
 };
 
-// Styles object for better organization
+// Styles object - Premium SaaS Design
 const styles = {
   sidebar: {
     width: 'var(--sidebar-width)',
-    background: 'var(--bg-sidebar)',
+    background: 'var(--bg-gradient-sidebar)',
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
     flexShrink: 0,
     position: 'relative',
-    boxShadow: '4px 0 24px rgba(0, 0, 0, 0.1)',
+    boxShadow: '4px 0 24px rgba(30, 58, 138, 0.15)',
   },
   logoSection: {
-    padding: '24px 20px',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    padding: '28px 20px',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
   },
   logoContainer: {
     display: 'flex',
@@ -53,31 +53,34 @@ const styles = {
     gap: '12px',
   },
   logoIcon: {
-    width: '44px',
-    height: '44px',
-    borderRadius: 'var(--radius-xl)',
-    background: 'rgba(255, 255, 255, 0.15)',
+    width: '48px',
+    height: '48px',
+    borderRadius: '14px',
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1))',
     backdropFilter: 'blur(10px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     color: '#fff',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
   },
   logoText: {
     flex: 1,
   },
   logoTitle: {
-    fontWeight: 800,
+    fontWeight: 700,
     fontSize: '20px',
     color: '#ffffff',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.02em',
+    fontFamily: 'var(--font-display)',
   },
   logoSubtitle: {
     fontSize: '11px',
-    color: 'rgba(255, 255, 255, 0.7)',
-    marginTop: '2px',
-    letterSpacing: '0.5px',
+    color: 'rgba(255, 255, 255, 0.75)',
+    marginTop: '3px',
+    letterSpacing: '0.8px',
+    textTransform: 'uppercase',
   },
   navSection: {
     flex: 1,
@@ -97,39 +100,42 @@ const styles = {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
-    padding: '12px 16px',
-    borderRadius: 'var(--radius-lg)',
+    gap: '14px',
+    padding: '13px 18px',
+    borderRadius: '12px',
     border: 'none',
-    background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.75)',
-    fontWeight: isActive ? 600 : 400,
+    background: isActive ? 'rgba(255, 255, 255, 0.18)' : 'transparent',
+    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.8)',
+    fontWeight: isActive ? 600 : 500,
     fontSize: '14px',
     cursor: 'pointer',
-    marginBottom: '4px',
+    marginBottom: '6px',
     textAlign: 'left',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.25s ease',
     position: 'relative',
     backdropFilter: isActive ? 'blur(10px)' : 'none',
+    boxShadow: isActive ? '0 2px 8px rgba(0, 0, 0, 0.15)' : 'none',
   }),
   navItemHover: {
-    background: 'rgba(255, 255, 255, 0.1)',
+    background: 'rgba(255, 255, 255, 0.12)',
     color: '#ffffff',
+    transform: 'translateX(4px)',
   },
   quickAction: {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
-    padding: '10px 14px',
-    borderRadius: 'var(--radius-lg)',
-    border: '1px dashed rgba(255, 255, 255, 0.3)',
-    background: 'transparent',
-    color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: '13px',
+    gap: '12px',
+    padding: '12px 16px',
+    borderRadius: '12px',
+    border: '2px dashed rgba(255, 255, 255, 0.25)',
+    background: 'rgba(255, 149, 0, 0.1)',
+    color: '#FFB340',
+    fontSize: '14px',
+    fontWeight: 500,
     cursor: 'pointer',
     textAlign: 'left',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.25s ease',
   },
   userSection: {
     padding: '16px 12px',
@@ -167,21 +173,21 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px',
-    padding: '10px',
-    borderRadius: 'var(--radius-lg)',
+    gap: '10px',
+    padding: '12px',
+    borderRadius: '12px',
     border: 'none',
-    background: 'rgba(239, 68, 68, 0.15)',
-    color: '#fca5a5',
-    fontSize: '13px',
+    background: 'rgba(255, 255, 255, 0.1)',
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: '14px',
     fontWeight: 500,
     cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    transition: 'all 0.25s ease',
   },
   header: {
     background: 'var(--bg-primary)',
-    borderBottom: '1px solid var(--border-light)',
-    padding: '0 32px',
+    borderBottom: '1px solid var(--border-primary)',
+    padding: '0 24px',
     height: 'var(--header-height)',
     display: 'flex',
     alignItems: 'center',
@@ -196,10 +202,11 @@ const styles = {
     gap: '24px',
   },
   headerTitle: {
-    fontSize: '22px',
-    fontWeight: 700,
+    fontSize: '18px',
+    fontWeight: 600,
     color: 'var(--text-primary)',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.02em',
+    fontFamily: 'var(--font-display)',
   },
   searchContainer: {
     position: 'relative',
@@ -299,7 +306,7 @@ const styles = {
   main: {
     flex: 1,
     overflowY: 'auto',
-    padding: '32px',
+    padding: '24px',
     background: 'var(--bg-secondary)',
   },
 };
@@ -335,8 +342,8 @@ export function Sidebar() {
             <Icons.Heart size={24} />
           </div>
           <div style={styles.logoText}>
-            <div style={styles.logoTitle}>DME</div>
-            <div style={styles.logoSubtitle}>Dossiers Médicaux</div>
+            <div style={styles.logoTitle}>DME.tn</div>
+            <div style={styles.logoSubtitle}>Dossier Médical</div>
           </div>
         </div>
       </div>
@@ -392,12 +399,14 @@ export function Sidebar() {
                   onClick={() => navigate(action.path)}
                   style={styles.quickAction}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                    e.currentTarget.style.background = 'rgba(255, 149, 0, 0.2)';
+                    e.currentTarget.style.borderColor = '#FFB340';
+                    e.currentTarget.style.transform = 'translateX(4px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                    e.currentTarget.style.background = 'rgba(255, 149, 0, 0.1)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                    e.currentTarget.style.transform = 'none';
                   }}
                 >
                   {Icon && <Icon size={18} />}
@@ -441,10 +450,12 @@ export function Sidebar() {
           onClick={logout}
           style={styles.logoutBtn}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.25)';
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+            e.currentTarget.style.color = '#fff';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)';
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.9)';
           }}
         >
           <Icons.LogOut size={18} />
@@ -621,7 +632,7 @@ export function AppLayout({ children, title }) {
     }}>
       {/* Global styles injection */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
         *, *::before, *::after {
           box-sizing: border-box;

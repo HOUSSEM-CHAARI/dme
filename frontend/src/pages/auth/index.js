@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Button, Input, Alert, Icons } from '../../components/ui';
 
-// Styles for the auth pages
+// Styles for the auth pages - Med.tn inspired
 const styles = {
   container: {
     minHeight: '100vh',
@@ -12,7 +12,7 @@ const styles = {
   },
   leftPanel: {
     width: '45%',
-    background: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #2563eb 100%)',
+    background: 'linear-gradient(135deg, #003D99 0%, #0052CC 40%, #0096B4 100%)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -28,7 +28,7 @@ const styles = {
     width: '400px',
     height: '400px',
     borderRadius: '50%',
-    background: 'rgba(255, 255, 255, 0.05)',
+    background: 'rgba(0, 180, 216, 0.2)',
   },
   decorativeCircle2: {
     position: 'absolute',
@@ -37,7 +37,7 @@ const styles = {
     width: '500px',
     height: '500px',
     borderRadius: '50%',
-    background: 'rgba(255, 255, 255, 0.03)',
+    background: 'rgba(255, 255, 255, 0.05)',
   },
   logoContainer: {
     display: 'flex',
@@ -48,37 +48,42 @@ const styles = {
     zIndex: 1,
   },
   logoIcon: {
-    width: '56px',
-    height: '56px',
-    borderRadius: '16px',
-    background: 'rgba(255, 255, 255, 0.15)',
+    width: '60px',
+    height: '60px',
+    borderRadius: '18px',
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1))',
     backdropFilter: 'blur(10px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
   },
   logoText: {
     display: 'flex',
     flexDirection: 'column',
   },
   logoTitle: {
-    fontSize: '32px',
+    fontSize: '34px',
     fontWeight: 800,
     letterSpacing: '-1px',
+    fontFamily: 'var(--font-family-heading)',
   },
   logoSubtitle: {
-    fontSize: '14px',
-    opacity: 0.8,
-    marginTop: '2px',
+    fontSize: '13px',
+    opacity: 0.85,
+    marginTop: '4px',
+    letterSpacing: '0.5px',
   },
   headline: {
-    fontSize: '36px',
-    fontWeight: 700,
-    lineHeight: 1.3,
-    marginBottom: '20px',
+    fontSize: '38px',
+    fontWeight: 800,
+    lineHeight: 1.25,
+    marginBottom: '24px',
     position: 'relative',
     zIndex: 1,
+    fontFamily: 'var(--font-family-heading)',
+    letterSpacing: '-0.5px',
   },
   description: {
     opacity: 0.85,
@@ -133,22 +138,23 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '48px',
-    background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)',
+    background: 'linear-gradient(180deg, var(--bg-section-alt) 0%, #f1f5f9 100%)',
   },
   formCard: {
     width: '100%',
-    maxWidth: '440px',
+    maxWidth: '460px',
     background: '#ffffff',
-    borderRadius: '24px',
-    padding: '40px',
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08)',
+    borderRadius: '28px',
+    padding: '44px',
+    boxShadow: '0 20px 60px rgba(0, 82, 204, 0.1)',
   },
   formTitle: {
-    fontSize: '28px',
-    fontWeight: 700,
+    fontSize: '30px',
+    fontWeight: 800,
     color: 'var(--text-primary)',
-    marginBottom: '8px',
+    marginBottom: '10px',
     letterSpacing: '-0.5px',
+    fontFamily: 'var(--font-family-heading)',
   },
   formSubtitle: {
     color: 'var(--text-secondary)',
@@ -191,7 +197,7 @@ const styles = {
     color: 'var(--text-secondary)',
   },
   link: {
-    color: 'var(--color-primary-600)',
+    color: 'var(--color-primary-500)',
     fontWeight: 600,
     textDecoration: 'none',
     marginLeft: '4px',
@@ -211,23 +217,24 @@ const styles = {
     marginBottom: '32px',
   },
   stepDot: (active, completed) => ({
-    width: '32px',
-    height: '32px',
+    width: '36px',
+    height: '36px',
     borderRadius: '50%',
-    background: completed || active ? 'var(--color-primary-600)' : 'var(--bg-tertiary)',
+    background: completed || active ? 'var(--color-primary-500)' : 'var(--bg-tertiary)',
     color: completed || active ? '#ffffff' : 'var(--text-tertiary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '14px',
-    fontWeight: 600,
+    fontWeight: 700,
     transition: 'all 0.3s ease',
+    boxShadow: completed || active ? '0 4px 12px rgba(0, 82, 204, 0.3)' : 'none',
   }),
   stepLine: (completed) => ({
     flex: 1,
-    height: '2px',
-    background: completed ? 'var(--color-primary-600)' : 'var(--border-light)',
-    borderRadius: '1px',
+    height: '3px',
+    background: completed ? 'var(--color-primary-500)' : 'var(--border-light)',
+    borderRadius: '2px',
     transition: 'all 0.3s ease',
   }),
   stepText: {
@@ -353,20 +360,20 @@ function AuthCard({ children }) {
             <Icons.Heart size={28} color="#ffffff" />
           </div>
           <div style={styles.logoText}>
-            <div style={styles.logoTitle}>DME</div>
-            <div style={styles.logoSubtitle}>Dossiers Médicaux Électroniques</div>
+            <div style={styles.logoTitle}>DME.tn</div>
+            <div style={styles.logoSubtitle}>Dossier Médical Électronique</div>
           </div>
         </div>
 
         {/* Headline */}
         <h2 style={styles.headline}>
-          La sécurité de vos données de santé, notre priorité.
+          Votre Dossier Médical en Ligne, en Toute Sécurité.
         </h2>
 
         {/* Description */}
         <p style={styles.description}>
-          Une plateforme unifiée pour patients, médecins et personnel médical.
-          Gérez vos dossiers médicaux en toute sécurité.
+          Centralisez, consultez et partagez votre dossier médical avec vos médecins.
+          Une plateforme moderne pour une meilleure prise en charge de votre santé.
         </p>
 
         {/* Features */}

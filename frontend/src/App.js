@@ -9,6 +9,7 @@ import { PatientDashboard, PatientDossierView } from './pages/patient';
 import { StaffDashboard } from './pages/staff';
 import { ProfilePage } from './pages/profile';
 import { NotFoundPage, NotAuthorizedPage } from './pages/errors';
+import { LandingPage } from './pages/landing';
 import { Spinner } from './components/ui';
 
 // ── Route guard ─────────────────────────────────────────────
@@ -49,12 +50,23 @@ function PublicRoute({ children }) {
   return children;
 }
 
+// ── Landing page redirect (public homepage) ─────────────────
+function LandingOrDashboard() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Navigate to="/dashboard" replace />;
+  return <LandingPage />;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* Public */}
+          {/* Public Landing Page */}
+          <Route path="/" element={<LandingOrDashboard />} />
+
+          {/* Public Auth */}
           <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
 
@@ -79,7 +91,6 @@ export default function App() {
           <Route path="/not-found" element={<NotFoundPage />} />
 
           {/* Fallback */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AuthProvider>

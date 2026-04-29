@@ -5,43 +5,52 @@ import { StatCard, Card, Button, Badge, Avatar, Spinner, EmptyState, Icons } fro
 import { usePatients, useDashboardStats } from '../../hooks';
 import { useAuth } from '../../context/AuthContext';
 
-// Styles
+// Styles - Premium SaaS Design
 const styles = {
   pageHeader: {
-    marginBottom: '32px',
+    marginBottom: '28px',
   },
   welcomeDate: {
     color: 'var(--text-secondary)',
-    fontSize: '15px',
+    fontSize: '13px',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '6px',
+    fontWeight: 500,
   },
   welcomeTitle: {
-    fontSize: '28px',
+    fontSize: '26px',
     fontWeight: 700,
     color: 'var(--text-primary)',
-    marginTop: '8px',
+    marginTop: '6px',
+    letterSpacing: '-0.02em',
+    fontFamily: 'var(--font-display)',
+  },
+  welcomeHighlight: {
+    color: 'var(--color-primary-600)',
   },
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '20px',
-    marginBottom: '32px',
+    marginBottom: '28px',
   },
   cardHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '20px',
+    paddingBottom: '14px',
+    borderBottom: '1px solid var(--border-primary)',
   },
   cardTitle: {
-    fontSize: '18px',
+    fontSize: '15px',
     fontWeight: 600,
     color: 'var(--text-primary)',
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    fontFamily: 'var(--font-display)',
   },
   tableContainer: {
     overflowX: 'auto',
@@ -89,7 +98,7 @@ export function StaffDashboard() {
           {today.charAt(0).toUpperCase() + today.slice(1)}
         </p>
         <h2 style={styles.welcomeTitle}>
-          Bienvenue, <span style={{ color: 'var(--color-primary-600)' }}>{user?.name}</span>
+          Bienvenue, <span style={styles.welcomeHighlight}>{user?.name}</span>
         </h2>
       </div>
 
@@ -100,7 +109,7 @@ export function StaffDashboard() {
           value={statsLoading ? '...' : stats?.total_patients ?? 0}
           icon={Icons.Users}
           iconSize={24}
-          color="var(--color-primary-600)"
+          color="primary"
           trend={stats?.patients_trend}
         />
         <StatCard
@@ -108,7 +117,7 @@ export function StaffDashboard() {
           value={statsLoading ? '...' : stats?.total_records ?? 0}
           icon={Icons.FileText}
           iconSize={24}
-          color="var(--color-secondary-600)"
+          color="teal"
           trend={stats?.records_trend}
         />
         <StatCard
@@ -116,7 +125,7 @@ export function StaffDashboard() {
           value={statsLoading ? '...' : stats?.total_analyses ?? 0}
           icon={Icons.Folder}
           iconSize={24}
-          color="#7c3aed"
+          color="purple"
           trend={stats?.documents_trend}
         />
       </div>

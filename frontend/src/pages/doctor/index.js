@@ -12,17 +12,29 @@ import {
 import { patientsAPI } from '../../api';
 import { useAuth } from '../../context/AuthContext';
 
-// Common styles
+// Common styles - Premium SaaS Design
 const styles = {
   pageHeader: {
-    marginBottom: '32px',
+    marginBottom: '28px',
   },
   welcomeText: {
     color: 'var(--text-secondary)',
-    fontSize: '15px',
+    fontSize: '13px',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '6px',
+    fontWeight: 500,
+  },
+  welcomeTitle: {
+    fontSize: '26px',
+    fontWeight: 700,
+    color: 'var(--text-primary)',
+    marginTop: '6px',
+    letterSpacing: '-0.02em',
+    fontFamily: 'var(--font-display)',
+  },
+  welcomeHighlight: {
+    color: 'var(--color-primary-600)',
   },
   userName: {
     color: 'var(--text-primary)',
@@ -32,21 +44,24 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
     gap: '20px',
-    marginBottom: '32px',
+    marginBottom: '28px',
   },
   cardHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '20px',
+    paddingBottom: '14px',
+    borderBottom: '1px solid var(--border-primary)',
   },
   cardTitle: {
-    fontSize: '18px',
+    fontSize: '15px',
     fontWeight: 600,
     color: 'var(--text-primary)',
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
+    fontFamily: 'var(--font-display)',
   },
   tableContainer: {
     overflowX: 'auto',
@@ -98,10 +113,11 @@ const styles = {
     alignItems: 'flex-start',
     gap: '24px',
     padding: '24px',
-    background: 'linear-gradient(135deg, var(--color-primary-50) 0%, #ffffff 100%)',
+    background: 'linear-gradient(135deg, var(--color-primary-50) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%)',
     borderRadius: 'var(--radius-xl)',
-    border: '1px solid var(--border-light)',
+    border: '1px solid var(--border-primary)',
     marginBottom: '24px',
+    boxShadow: 'var(--shadow-sm)',
   },
   patientAvatar: {
     flexShrink: 0,
@@ -110,11 +126,12 @@ const styles = {
     flex: 1,
   },
   patientFullName: {
-    fontSize: '26px',
+    fontSize: '22px',
     fontWeight: 700,
     color: 'var(--text-primary)',
     marginBottom: '8px',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.02em',
+    fontFamily: 'var(--font-display)',
   },
   patientId: {
     display: 'flex',
@@ -277,8 +294,8 @@ export function DoctorDashboard() {
           <Icons.Calendar size={18} />
           {today.charAt(0).toUpperCase() + today.slice(1)}
         </p>
-        <h2 style={{ fontSize: '28px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '8px' }}>
-          Bienvenue, <span style={{ color: 'var(--color-primary-600)' }}>{user?.name}</span>
+        <h2 style={styles.welcomeTitle}>
+          Bienvenue, <span style={styles.welcomeHighlight}>{user?.name}</span>
         </h2>
       </div>
 
@@ -289,31 +306,31 @@ export function DoctorDashboard() {
           value={loading ? '...' : stats?.total_patients ?? 0}
           icon={Icons.Users}
           iconSize={24}
-          color="var(--color-primary-600)"
+          color="primary"
           trend={stats?.patients_trend}
         />
         <StatCard
-          label="Dossiers médicaux"
+          label="Consultations aujourd'hui"
           value={loading ? '...' : stats?.total_records ?? 0}
-          icon={Icons.FileText}
+          icon={Icons.Stethoscope}
           iconSize={24}
-          color="var(--color-secondary-600)"
+          color="teal"
           trend={stats?.records_trend}
         />
         <StatCard
-          label="Ordonnances"
+          label="Ordonnances actives"
           value={loading ? '...' : stats?.total_prescriptions ?? 0}
           icon={Icons.Clipboard}
           iconSize={24}
-          color="#7c3aed"
+          color="purple"
           trend={stats?.prescriptions_trend}
         />
         <StatCard
-          label="Analyses"
+          label="Analyses en attente"
           value={loading ? '...' : stats?.total_analyses ?? 0}
           icon={Icons.Activity}
           iconSize={24}
-          color="#f59e0b"
+          color="warning"
           trend={stats?.analyses_trend}
         />
       </div>
