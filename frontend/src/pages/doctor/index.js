@@ -12,29 +12,48 @@ import {
 import { patientsAPI } from '../../api';
 import { useAuth } from '../../context/AuthContext';
 
-// Common styles - Premium SaaS Design
+// Doctor Dashboard - Soft Professional Theme
+const DOCTOR_ACCENT = '#4a9eff';
+
 const styles = {
   pageHeader: {
     marginBottom: '28px',
+    padding: '24px 28px',
+    background: 'linear-gradient(135deg, #f0f7ff 0%, #e0efff 50%, #f4faf7 100%)',
+    borderRadius: '20px',
+    position: 'relative',
+    overflow: 'hidden',
+    border: '1px solid #c7e2ff',
+  },
+  pageHeaderPattern: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: '50%',
+    background: `radial-gradient(circle at 80% 50%, rgba(74, 158, 255, 0.1) 0%, transparent 50%)`,
   },
   welcomeText: {
-    color: 'var(--text-secondary)',
+    color: '#3b8ae8',
     fontSize: '13px',
     display: 'flex',
     alignItems: 'center',
-    gap: '6px',
+    gap: '8px',
     fontWeight: 500,
+    position: 'relative',
+    zIndex: 1,
   },
   welcomeTitle: {
     fontSize: '26px',
     fontWeight: 700,
-    color: 'var(--text-primary)',
-    marginTop: '6px',
+    color: '#1a4578',
+    marginTop: '8px',
     letterSpacing: '-0.02em',
-    fontFamily: 'var(--font-display)',
+    position: 'relative',
+    zIndex: 1,
   },
   welcomeHighlight: {
-    color: 'var(--color-primary-600)',
+    color: '#4a9eff',
   },
   userName: {
     color: 'var(--text-primary)',
@@ -43,25 +62,34 @@ const styles = {
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '20px',
-    marginBottom: '28px',
+    gap: '16px',
+    marginBottom: '24px',
   },
   cardHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: '20px',
-    paddingBottom: '14px',
-    borderBottom: '1px solid var(--border-primary)',
+    paddingBottom: '16px',
+    borderBottom: '1px solid #e5e7eb',
   },
   cardTitle: {
-    fontSize: '15px',
+    fontSize: '16px',
     fontWeight: 600,
-    color: 'var(--text-primary)',
+    color: '#111827',
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    fontFamily: 'var(--font-display)',
+  },
+  cardTitleIcon: {
+    width: '32px',
+    height: '32px',
+    borderRadius: '8px',
+    background: '#f0f7ff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: DOCTOR_ACCENT,
   },
   tableContainer: {
     overflowX: 'auto',
@@ -290,13 +318,17 @@ export function DoctorDashboard() {
     <AppLayout title="Tableau de bord">
       {/* Welcome Header */}
       <div style={styles.pageHeader}>
+        <div style={styles.pageHeaderPattern} />
         <p style={styles.welcomeText}>
-          <Icons.Calendar size={18} />
+          <Icons.Calendar size={16} />
           {today.charAt(0).toUpperCase() + today.slice(1)}
         </p>
         <h2 style={styles.welcomeTitle}>
-          Bienvenue, <span style={styles.welcomeHighlight}>{user?.name}</span>
+          Bonjour, <span style={styles.welcomeHighlight}>Dr. {user?.name?.split(' ').pop()}</span>
         </h2>
+        <p style={{ color: '#3b8ae8', fontSize: '14px', marginTop: '8px', position: 'relative', zIndex: 1 }}>
+          Vous avez {stats?.total_records ?? 0} consultations prévues aujourd'hui
+        </p>
       </div>
 
       {/* Stats Grid */}

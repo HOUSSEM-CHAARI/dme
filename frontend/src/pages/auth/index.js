@@ -3,101 +3,112 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Button, Input, Alert, Icons } from '../../components/ui';
 
-// Styles for the auth pages - Med.tn inspired
+// Premium Healthcare Auth Styles - Soft & Calming
 const styles = {
   container: {
     minHeight: '100vh',
     display: 'flex',
     fontFamily: 'var(--font-family)',
+    background: 'linear-gradient(135deg, #f0f7ff 0%, #f8fbff 50%, #f4faf7 100%)',
   },
   leftPanel: {
-    width: '45%',
-    background: 'linear-gradient(135deg, #003D99 0%, #0052CC 40%, #0096B4 100%)',
+    width: '48%',
+    background: 'linear-gradient(160deg, #4a9eff 0%, #3b8ae8 40%, #4aad80 100%)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    padding: '60px',
+    padding: '60px 50px',
     color: '#fff',
     position: 'relative',
     overflow: 'hidden',
   },
-  decorativeCircle1: {
+  // Soft decorative shapes
+  decorativeShape1: {
     position: 'absolute',
-    top: '-100px',
-    right: '-100px',
+    top: '10%',
+    right: '-5%',
+    width: '300px',
+    height: '300px',
+    borderRadius: '50%',
+    background: 'rgba(255, 255, 255, 0.08)',
+    filter: 'blur(40px)',
+  },
+  decorativeShape2: {
+    position: 'absolute',
+    bottom: '15%',
+    left: '-10%',
     width: '400px',
     height: '400px',
     borderRadius: '50%',
-    background: 'rgba(0, 180, 216, 0.2)',
+    background: 'rgba(74, 173, 128, 0.15)',
+    filter: 'blur(60px)',
   },
-  decorativeCircle2: {
+  decorativeShape3: {
     position: 'absolute',
-    bottom: '-150px',
-    left: '-150px',
-    width: '500px',
-    height: '500px',
+    top: '50%',
+    right: '10%',
+    width: '150px',
+    height: '150px',
     borderRadius: '50%',
     background: 'rgba(255, 255, 255, 0.05)',
   },
   logoContainer: {
     display: 'flex',
     alignItems: 'center',
-    gap: '16px',
+    gap: '14px',
     marginBottom: '48px',
     position: 'relative',
     zIndex: 1,
   },
   logoIcon: {
-    width: '60px',
-    height: '60px',
-    borderRadius: '18px',
-    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1))',
+    width: '56px',
+    height: '56px',
+    borderRadius: '16px',
+    background: 'rgba(255, 255, 255, 0.2)',
     backdropFilter: 'blur(10px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-    border: '1px solid rgba(255, 255, 255, 0.15)',
+    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
   },
   logoText: {
     display: 'flex',
     flexDirection: 'column',
   },
   logoTitle: {
-    fontSize: '34px',
-    fontWeight: 800,
-    letterSpacing: '-1px',
-    fontFamily: 'var(--font-family-heading)',
-  },
-  logoSubtitle: {
-    fontSize: '13px',
-    opacity: 0.85,
-    marginTop: '4px',
-    letterSpacing: '0.5px',
-  },
-  headline: {
-    fontSize: '38px',
-    fontWeight: 800,
-    lineHeight: 1.25,
-    marginBottom: '24px',
-    position: 'relative',
-    zIndex: 1,
-    fontFamily: 'var(--font-family-heading)',
+    fontSize: '28px',
+    fontWeight: 700,
     letterSpacing: '-0.5px',
   },
+  logoSubtitle: {
+    fontSize: '12px',
+    opacity: 0.9,
+    marginTop: '2px',
+    letterSpacing: '0.3px',
+  },
+  headline: {
+    fontSize: '34px',
+    fontWeight: 700,
+    lineHeight: 1.3,
+    marginBottom: '20px',
+    position: 'relative',
+    zIndex: 1,
+    letterSpacing: '-0.3px',
+  },
   description: {
-    opacity: 0.85,
-    fontSize: '16px',
-    lineHeight: 1.75,
-    marginBottom: '40px',
-    maxWidth: '420px',
+    opacity: 0.9,
+    fontSize: '15px',
+    lineHeight: 1.7,
+    marginBottom: '36px',
+    maxWidth: '380px',
     position: 'relative',
     zIndex: 1,
   },
   featureList: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+    gap: '14px',
     position: 'relative',
     zIndex: 1,
   },
@@ -105,20 +116,22 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '14px',
-    padding: '14px 18px',
-    background: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
-    backdropFilter: 'blur(10px)',
-    transition: 'all 0.3s ease',
+    padding: '14px 16px',
+    background: 'rgba(255, 255, 255, 0.12)',
+    borderRadius: '14px',
+    backdropFilter: 'blur(8px)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    transition: 'all 0.2s ease',
   },
   featureIcon: {
-    width: '40px',
-    height: '40px',
+    width: '38px',
+    height: '38px',
     borderRadius: '10px',
     background: 'rgba(255, 255, 255, 0.15)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   featureText: {
     flex: 1,
@@ -130,41 +143,41 @@ const styles = {
   },
   featureDesc: {
     fontSize: '12px',
-    opacity: 0.75,
+    opacity: 0.8,
   },
   rightPanel: {
     flex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '48px',
-    background: 'linear-gradient(180deg, var(--bg-section-alt) 0%, #f1f5f9 100%)',
+    padding: '40px',
   },
   formCard: {
     width: '100%',
-    maxWidth: '460px',
+    maxWidth: '440px',
     background: '#ffffff',
-    borderRadius: '28px',
-    padding: '44px',
-    boxShadow: '0 20px 60px rgba(0, 82, 204, 0.1)',
+    borderRadius: '24px',
+    padding: '40px',
+    boxShadow: '0 8px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03)',
+    border: '1px solid rgba(0, 0, 0, 0.04)',
   },
   formTitle: {
-    fontSize: '30px',
-    fontWeight: 800,
+    fontSize: '26px',
+    fontWeight: 700,
     color: 'var(--text-primary)',
-    marginBottom: '10px',
-    letterSpacing: '-0.5px',
-    fontFamily: 'var(--font-family-heading)',
+    marginBottom: '8px',
+    letterSpacing: '-0.3px',
   },
   formSubtitle: {
     color: 'var(--text-secondary)',
-    fontSize: '15px',
-    marginBottom: '32px',
+    fontSize: '14px',
+    marginBottom: '28px',
+    lineHeight: 1.5,
   },
   divider: {
     display: 'flex',
     alignItems: 'center',
-    gap: '16px',
+    gap: '14px',
     margin: '24px 0',
     color: 'var(--text-tertiary)',
     fontSize: '13px',
@@ -180,8 +193,8 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '10px',
-    padding: '14px',
-    border: '1px solid var(--border-light)',
+    padding: '12px',
+    border: '1px solid var(--border-medium)',
     borderRadius: '12px',
     background: 'transparent',
     color: 'var(--text-secondary)',
@@ -192,73 +205,74 @@ const styles = {
   },
   linkText: {
     textAlign: 'center',
-    marginTop: '28px',
+    marginTop: '24px',
     fontSize: '14px',
     color: 'var(--text-secondary)',
   },
   link: {
-    color: 'var(--color-primary-500)',
+    color: 'var(--color-primary-600)',
     fontWeight: 600,
     textDecoration: 'none',
     marginLeft: '4px',
   },
   testHint: {
-    marginTop: '28px',
-    padding: '16px',
-    background: 'var(--bg-tertiary)',
+    marginTop: '24px',
+    padding: '14px',
+    background: 'var(--color-primary-50)',
     borderRadius: '12px',
     fontSize: '12px',
     color: 'var(--text-secondary)',
+    border: '1px solid var(--color-primary-100)',
   },
   stepIndicator: {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
-    marginBottom: '32px',
+    gap: '10px',
+    marginBottom: '28px',
   },
   stepDot: (active, completed) => ({
-    width: '36px',
-    height: '36px',
+    width: '34px',
+    height: '34px',
     borderRadius: '50%',
     background: completed || active ? 'var(--color-primary-500)' : 'var(--bg-tertiary)',
     color: completed || active ? '#ffffff' : 'var(--text-tertiary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '14px',
-    fontWeight: 700,
-    transition: 'all 0.3s ease',
-    boxShadow: completed || active ? '0 4px 12px rgba(0, 82, 204, 0.3)' : 'none',
+    fontSize: '13px',
+    fontWeight: 600,
+    transition: 'all 0.2s ease',
+    boxShadow: completed || active ? 'var(--shadow-primary)' : 'none',
   }),
   stepLine: (completed) => ({
     flex: 1,
-    height: '3px',
+    height: '2px',
     background: completed ? 'var(--color-primary-500)' : 'var(--border-light)',
     borderRadius: '2px',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.2s ease',
   }),
   stepText: {
     fontSize: '13px',
     color: 'var(--text-secondary)',
     fontWeight: 500,
-    marginLeft: '8px',
+    marginLeft: '6px',
   },
   roleCard: (selected) => ({
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '16px',
-    padding: '18px',
+    gap: '14px',
+    padding: '16px',
     border: `2px solid ${selected ? 'var(--color-primary-500)' : 'var(--border-light)'}`,
     borderRadius: '14px',
-    marginBottom: '12px',
+    marginBottom: '10px',
     cursor: 'pointer',
     background: selected ? 'var(--color-primary-50)' : '#ffffff',
     transition: 'all 0.2s ease',
   }),
   roleRadio: {
     marginTop: '2px',
-    width: '20px',
-    height: '20px',
+    width: '18px',
+    height: '18px',
     accentColor: 'var(--color-primary-600)',
   },
   roleContent: {
@@ -269,13 +283,14 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     fontWeight: 600,
-    fontSize: '15px',
+    fontSize: '14px',
     color: 'var(--text-primary)',
     marginBottom: '4px',
   },
   roleDesc: {
     fontSize: '13px',
     color: 'var(--text-secondary)',
+    lineHeight: 1.4,
   },
   forgotPassword: {
     background: 'none',
@@ -289,7 +304,7 @@ const styles = {
   formGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: '0 16px',
+    gap: '0 14px',
   },
   buttonGroup: {
     display: 'flex',
@@ -303,12 +318,12 @@ const FEATURES = [
   {
     icon: Icons.Shield,
     title: 'Sécurité maximale',
-    desc: 'Données chiffrées et protégées 24/7',
+    desc: 'Données chiffrées et protégées',
   },
   {
     icon: Icons.CheckCircle,
     title: 'Conforme RGPD',
-    desc: 'Respect total de vos droits numériques',
+    desc: 'Respect de vos droits numériques',
   },
   {
     icon: Icons.Zap,
@@ -317,8 +332,8 @@ const FEATURES = [
   },
   {
     icon: Icons.Users,
-    title: 'Multi-utilisateurs',
-    desc: 'Patient, médecin et staff médical',
+    title: 'Multi-profils',
+    desc: 'Patient, médecin et personnel',
   },
 ];
 
@@ -339,7 +354,7 @@ const ROLE_OPTIONS = [
   {
     value: 'staff',
     icon: Icons.Building,
-    label: 'Staff médical',
+    label: 'Personnel médical',
     desc: 'Administration et gestion des données',
   },
 ];
@@ -350,14 +365,14 @@ function AuthCard({ children }) {
     <div style={styles.container}>
       {/* Left Panel - Branding */}
       <div style={styles.leftPanel}>
-        {/* Decorative circles */}
-        <div style={styles.decorativeCircle1} />
-        <div style={styles.decorativeCircle2} />
+        <div style={styles.decorativeShape1} />
+        <div style={styles.decorativeShape2} />
+        <div style={styles.decorativeShape3} />
 
         {/* Logo */}
         <div style={styles.logoContainer}>
           <div style={styles.logoIcon}>
-            <Icons.Heart size={28} color="#ffffff" />
+            <Icons.Heart size={26} color="#ffffff" />
           </div>
           <div style={styles.logoText}>
             <div style={styles.logoTitle}>DME.tn</div>
@@ -367,32 +382,21 @@ function AuthCard({ children }) {
 
         {/* Headline */}
         <h2 style={styles.headline}>
-          Votre Dossier Médical en Ligne, en Toute Sécurité.
+          Votre santé, notre priorité
         </h2>
 
         {/* Description */}
         <p style={styles.description}>
-          Centralisez, consultez et partagez votre dossier médical avec vos médecins.
-          Une plateforme moderne pour une meilleure prise en charge de votre santé.
+          Centralisez et partagez votre dossier médical en toute sécurité.
+          Une plateforme moderne pour une meilleure prise en charge.
         </p>
 
         {/* Features */}
         <div style={styles.featureList}>
           {FEATURES.map((feature, index) => (
-            <div
-              key={index}
-              style={{...styles.featureItem, cursor: 'default'}}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
-                e.currentTarget.style.transform = 'translateX(8px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.transform = 'translateX(0)';
-              }}
-            >
+            <div key={index} style={styles.featureItem}>
               <div style={styles.featureIcon}>
-                <feature.icon size={20} color="#ffffff" />
+                <feature.icon size={18} color="#ffffff" />
               </div>
               <div style={styles.featureText}>
                 <div style={styles.featureTitle}>{feature.title}</div>
@@ -448,9 +452,9 @@ export function LoginPage() {
 
   return (
     <AuthCard>
-      <h3 style={styles.formTitle}>Bienvenue</h3>
+      <h3 style={styles.formTitle}>Connexion</h3>
       <p style={styles.formSubtitle}>
-        Connectez-vous à votre espace médical sécurisé
+        Accédez à votre espace médical sécurisé
       </p>
 
       {displayError && (
@@ -472,7 +476,7 @@ export function LoginPage() {
         <Input
           label="Mot de passe"
           type="password"
-          placeholder="Entrez votre mot de passe"
+          placeholder="Votre mot de passe"
           value={form.password}
           onChange={handleChange('password')}
           icon={Icons.Lock}
@@ -509,11 +513,11 @@ export function LoginPage() {
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.background = 'transparent';
-          e.currentTarget.style.borderColor = 'var(--border-light)';
+          e.currentTarget.style.borderColor = 'var(--border-medium)';
         }}
       >
         <Icons.Shield size={18} />
-        Authentification SSO entreprise
+        Authentification entreprise (SSO)
       </button>
 
       <p style={styles.linkText}>
@@ -525,14 +529,14 @@ export function LoginPage() {
 
       {/* Dev hint */}
       <div style={styles.testHint}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <Icons.Info size={14} />
-          <strong>Comptes de test</strong>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <Icons.Info size={14} style={{ color: 'var(--color-primary-600)' }} />
+          <strong style={{ color: 'var(--color-primary-700)' }}>Comptes de test</strong>
         </div>
         <div style={{ lineHeight: 1.6 }}>
-          dr.martin@hopital.fr / marie.dupont@email.com / julie.bernard@hopital.fr
+          dr.martin@hopital.fr / marie.dupont@email.com
           <br />
-          Mot de passe : <code style={{ background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>Password123!</code>
+          Mot de passe : <code style={{ background: 'var(--color-primary-100)', padding: '2px 6px', borderRadius: '4px' }}>Password123!</code>
         </div>
       </div>
     </AuthCard>
@@ -569,7 +573,7 @@ export function SignupPage() {
 
   const validateStep1 = () => {
     const newErrors = {};
-    if (!form.role) newErrors.role = 'Veuillez choisir un rôle';
+    if (!form.role) newErrors.role = 'Veuillez choisir un profil';
     if (!form.email) newErrors.email = 'Email requis';
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Email invalide';
     if (!form.password) newErrors.password = 'Mot de passe requis';
@@ -614,7 +618,7 @@ export function SignupPage() {
       {/* Step Indicator */}
       <div style={styles.stepIndicator}>
         <div style={styles.stepDot(step >= 1, step > 1)}>
-          {step > 1 ? <Icons.Check size={16} /> : '1'}
+          {step > 1 ? <Icons.Check size={14} /> : '1'}
         </div>
         <div style={styles.stepLine(step > 1)} />
         <div style={styles.stepDot(step >= 2, step > 2)}>2</div>
@@ -635,13 +639,13 @@ export function SignupPage() {
           )}
 
           {/* Role Selection */}
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '18px' }}>
             <label style={{
               display: 'block',
               fontSize: '14px',
               fontWeight: 500,
               color: 'var(--text-secondary)',
-              marginBottom: '12px',
+              marginBottom: '10px',
             }}>
               Je suis *
             </label>
@@ -652,11 +656,13 @@ export function SignupPage() {
                 onMouseEnter={(e) => {
                   if (form.role !== option.value) {
                     e.currentTarget.style.borderColor = 'var(--border-medium)';
+                    e.currentTarget.style.background = 'var(--bg-secondary)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (form.role !== option.value) {
                     e.currentTarget.style.borderColor = 'var(--border-light)';
+                    e.currentTarget.style.background = '#ffffff';
                   }
                 }}
               >
@@ -670,7 +676,7 @@ export function SignupPage() {
                 />
                 <div style={styles.roleContent}>
                   <div style={styles.roleTitle}>
-                    <option.icon size={18} />
+                    <option.icon size={16} style={{ color: 'var(--color-primary-600)' }} />
                     {option.label}
                   </div>
                   <div style={styles.roleDesc}>{option.desc}</div>
@@ -733,7 +739,7 @@ export function SignupPage() {
         <>
           <h3 style={styles.formTitle}>Informations personnelles</h3>
           <p style={styles.formSubtitle}>
-            Complétez votre profil pour commencer
+            Complétez votre profil pour continuer
           </p>
 
           {error && (
@@ -745,14 +751,14 @@ export function SignupPage() {
           <div style={styles.formGrid}>
             <Input
               label="Prénom *"
-              placeholder="Marie"
+              placeholder="Votre prénom"
               value={form.first_name}
               onChange={handleChange('first_name')}
               error={errors.first_name}
             />
             <Input
               label="Nom *"
-              placeholder="Dupont"
+              placeholder="Votre nom"
               value={form.last_name}
               onChange={handleChange('last_name')}
               error={errors.last_name}
@@ -769,7 +775,7 @@ export function SignupPage() {
 
           <Input
             label="Téléphone"
-            placeholder="+33 6 00 00 00 00"
+            placeholder="+216 XX XXX XXX"
             value={form.phone_number}
             onChange={handleChange('phone_number')}
             icon={Icons.Phone}
@@ -780,21 +786,21 @@ export function SignupPage() {
             <>
               <Input
                 label="Spécialisation"
-                placeholder="Médecine générale"
+                placeholder="Ex: Médecine générale"
                 value={form.specialization}
                 onChange={handleChange('specialization')}
                 icon={Icons.Stethoscope}
               />
               <Input
                 label="Numéro de licence"
-                placeholder="MED-2024-XXX"
+                placeholder="Votre numéro de licence"
                 value={form.license_number}
                 onChange={handleChange('license_number')}
                 icon={Icons.Award}
               />
               <Input
                 label="Établissement"
-                placeholder="Hôpital Saint-Louis"
+                placeholder="Nom de l'établissement"
                 value={form.hospital_affiliation}
                 onChange={handleChange('hospital_affiliation')}
                 icon={Icons.Building}
@@ -806,7 +812,7 @@ export function SignupPage() {
           {form.role === 'patient' && (
             <Input
               label="Adresse"
-              placeholder="12 rue des Lilas, Paris"
+              placeholder="Votre adresse"
               value={form.address}
               onChange={handleChange('address')}
               icon={Icons.MapPin}

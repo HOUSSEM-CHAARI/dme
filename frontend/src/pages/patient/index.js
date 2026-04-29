@@ -11,30 +11,91 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { patientsAPI, chronicDiseasesAPI } from '../../api';
 
-// Common styles - Premium SaaS Design
+// Patient Dashboard - Soft Healthcare Wellness Theme
+
 const styles = {
+  // Soft Calming Header
   pageHeader: {
     marginBottom: '28px',
+    padding: '28px 32px',
+    background: 'linear-gradient(135deg, #f4faf7 0%, #e5f5ed 50%, #f0f7ff 100%)',
+    borderRadius: '20px',
+    position: 'relative',
+    overflow: 'hidden',
+    border: '1px solid #c8ebda',
+  },
+  pageHeaderPattern: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `radial-gradient(circle at 90% 20%, rgba(74, 173, 128, 0.08) 0%, transparent 50%)`,
+    pointerEvents: 'none',
+  },
+  pageHeaderDecor: {
+    position: 'absolute',
+    top: '-40px',
+    right: '-20px',
+    width: '200px',
+    height: '200px',
+    background: 'radial-gradient(circle, rgba(74, 173, 128, 0.1) 0%, transparent 70%)',
+    borderRadius: '50%',
   },
   welcomeDate: {
-    color: 'var(--text-secondary)',
+    color: '#3a9168',
     fontSize: '13px',
     display: 'flex',
     alignItems: 'center',
-    gap: '6px',
+    gap: '8px',
     fontWeight: 500,
+    position: 'relative',
+    zIndex: 1,
   },
   welcomeTitle: {
-    fontSize: '26px',
+    fontSize: '28px',
     fontWeight: 700,
-    color: 'var(--text-primary)',
-    marginTop: '6px',
+    color: '#214d3b',
+    marginTop: '8px',
     letterSpacing: '-0.02em',
-    fontFamily: 'var(--font-display)',
+    position: 'relative',
+    zIndex: 1,
   },
   welcomeHighlight: {
-    color: 'var(--color-secondary-600)',
+    color: '#4aad80',
   },
+  welcomeSubtitle: {
+    color: '#3a9168',
+    fontSize: '14px',
+    marginTop: '8px',
+    position: 'relative',
+    zIndex: 1,
+  },
+  welcomeStats: {
+    display: 'flex',
+    gap: '16px',
+    marginTop: '20px',
+    position: 'relative',
+    zIndex: 1,
+  },
+  welcomeStat: {
+    background: '#ffffff',
+    padding: '14px 20px',
+    borderRadius: '14px',
+    border: '1px solid #c8ebda',
+    boxShadow: '0 2px 8px rgba(74, 173, 128, 0.06)',
+  },
+  welcomeStatValue: {
+    fontSize: '22px',
+    fontWeight: 700,
+    color: '#214d3b',
+  },
+  welcomeStatLabel: {
+    fontSize: '12px',
+    color: '#3a9168',
+    marginTop: '2px',
+  },
+  // Quick Actions - Soft Wellness Cards
   quickActionsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
@@ -43,24 +104,24 @@ const styles = {
   quickActionButton: {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
+    gap: '14px',
     padding: '16px',
-    background: 'var(--bg-primary)',
-    border: '1px solid var(--border-primary)',
-    borderRadius: 'var(--radius-xl)',
+    background: '#ffffff',
+    border: '1px solid #e8e6e1',
+    borderRadius: '14px',
     cursor: 'pointer',
-    transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: 'all 200ms ease',
     textAlign: 'left',
     width: '100%',
   },
   quickActionIcon: {
     width: '44px',
     height: '44px',
-    borderRadius: 'var(--radius-lg)',
+    borderRadius: '12px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    transition: 'transform 200ms',
+    flexShrink: 0,
   },
   quickActionText: {
     flex: 1,
@@ -68,48 +129,114 @@ const styles = {
   quickActionTitle: {
     fontWeight: 600,
     fontSize: '14px',
-    color: 'var(--text-primary)',
+    color: '#1a1918',
     marginBottom: '2px',
   },
   quickActionDesc: {
     fontSize: '12px',
-    color: 'var(--text-secondary)',
+    color: '#5c5854',
   },
+  quickActionArrow: {
+    width: '32px',
+    height: '32px',
+    borderRadius: '10px',
+    background: '#f4faf7',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#4aad80',
+  },
+  // Info Grid - Health Overview Cards
   infoGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: '20px',
-    marginBottom: '24px',
+    gap: '24px',
+    marginBottom: '28px',
+  },
+  infoCard: {
+    background: '#ffffff',
+    borderRadius: '20px',
+    padding: '24px',
+    border: '1px solid #e5e7eb',
+    boxShadow: '0 4px 20px -5px rgba(0, 0, 0, 0.08)',
+  },
+  infoCardHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    marginBottom: '20px',
+    paddingBottom: '16px',
+    borderBottom: '2px solid #ecfdf5',
+  },
+  infoCardIcon: {
+    width: '44px',
+    height: '44px',
+    borderRadius: '14px',
+    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#ffffff',
+    boxShadow: '0 4px 12px -2px rgba(5, 150, 105, 0.4)',
+  },
+  infoCardTitle: {
+    fontSize: '16px',
+    fontWeight: 600,
+    color: '#064e3b',
   },
   infoRow: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '14px 0',
-    borderBottom: '1px solid var(--border-light)',
+    borderBottom: '1px solid #f3f4f6',
   },
   infoLabel: {
-    color: 'var(--text-secondary)',
+    color: '#6b7280',
     fontSize: '14px',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '10px',
+  },
+  infoLabelIcon: {
+    width: '32px',
+    height: '32px',
+    borderRadius: '10px',
+    background: '#f0fdf4',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#059669',
   },
   infoValue: {
-    fontWeight: 500,
-    color: 'var(--text-primary)',
+    fontWeight: 600,
+    color: '#064e3b',
     fontSize: '14px',
+    background: '#f0fdf4',
+    padding: '6px 12px',
+    borderRadius: '8px',
   },
   profileHeader: {
     display: 'flex',
     alignItems: 'center',
-    gap: '20px',
-    padding: '24px',
-    background: 'linear-gradient(135deg, var(--color-secondary-50) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%)',
-    borderRadius: 'var(--radius-xl)',
-    border: '1px solid var(--border-primary)',
-    marginBottom: '24px',
-    boxShadow: 'var(--shadow-sm)',
+    gap: '24px',
+    padding: '28px',
+    background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #cffafe 100%)',
+    borderRadius: '24px',
+    border: '1px solid #a7f3d0',
+    marginBottom: '28px',
+    boxShadow: '0 8px 30px -10px rgba(5, 150, 105, 0.2)',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  profileHeaderDecor: {
+    position: 'absolute',
+    top: '-50%',
+    right: '-10%',
+    width: '300px',
+    height: '300px',
+    background: 'radial-gradient(circle, rgba(5, 150, 105, 0.1) 0%, transparent 70%)',
+    borderRadius: '50%',
   },
   profileName: {
     fontSize: '22px',
@@ -272,10 +399,12 @@ const styles = {
   },
 };
 
-// Patient Dashboard
+// Patient Dashboard - Premium Wellness Experience
 export function PatientDashboard() {
   const { user } = useAuth();
   const { data: profile, loading } = useMyPatientProfile();
+  const { data: prescriptions } = usePrescriptions(profile?.id_patient);
+  const { data: analyses } = useAnalyses(profile?.id_patient);
 
   const today = new Date().toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -286,50 +415,70 @@ export function PatientDashboard() {
 
   const quickActions = [
     {
-      icon: <Icons.FileText size={22} />,
+      icon: <Icons.FileText size={24} />,
       title: 'Mon dossier médical',
       desc: 'Consulter mes documents',
-      color: 'var(--color-primary-100)',
-      iconColor: 'var(--color-primary-600)',
+      gradient: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
       href: '/my-records',
     },
     {
-      icon: <Icons.User size={22} />,
+      icon: <Icons.User size={24} />,
       title: 'Mon profil',
       desc: 'Modifier mes informations',
-      color: 'var(--color-secondary-100)',
-      iconColor: 'var(--color-secondary-600)',
+      gradient: 'linear-gradient(135deg, #0d9488 0%, #14b8a6 100%)',
       href: '/profile',
     },
     {
-      icon: <Icons.Clipboard size={22} />,
+      icon: <Icons.Clipboard size={24} />,
       title: 'Mes ordonnances',
-      desc: 'Voir mes traitements',
-      color: '#ede9fe',
-      iconColor: '#7c3aed',
+      desc: 'Voir mes traitements actifs',
+      gradient: 'linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)',
       href: '/my-records',
     },
     {
-      icon: <Icons.Activity size={22} />,
+      icon: <Icons.Activity size={24} />,
       title: 'Mes analyses',
       desc: 'Résultats d\'examens',
-      color: '#fef3c7',
-      iconColor: '#f59e0b',
+      gradient: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
       href: '/my-records',
     },
   ];
 
+  const activePrescriptions = prescriptions?.filter(p => p.status === 'active')?.length || 0;
+  const pendingAnalyses = analyses?.filter(a => a.status === 'pending')?.length || 0;
+
   return (
     <AppLayout title="Mon espace santé">
-      {/* Welcome Header */}
+      {/* Premium Welcome Header */}
       <div style={styles.pageHeader}>
+        <div style={styles.pageHeaderPattern} />
+        <div style={styles.pageHeaderDecor} />
         <p style={styles.welcomeDate}>
-          <Icons.Calendar size={18} />
+          <Icons.Calendar size={16} />
           {today.charAt(0).toUpperCase() + today.slice(1)}
         </p>
         <h2 style={styles.welcomeTitle}>
-          Bienvenue, <span style={styles.welcomeHighlight}>{user?.name}</span>
+          Bonjour, <span style={styles.welcomeHighlight}>{user?.name}</span>
         </h2>
+        <p style={styles.welcomeSubtitle}>
+          Bienvenue dans votre espace santé personnel
+        </p>
+
+        {/* Quick Stats in Header */}
+        <div style={styles.welcomeStats}>
+          <div style={styles.welcomeStat}>
+            <div style={styles.welcomeStatValue}>{activePrescriptions}</div>
+            <div style={styles.welcomeStatLabel}>Ordonnances actives</div>
+          </div>
+          <div style={styles.welcomeStat}>
+            <div style={styles.welcomeStatValue}>{pendingAnalyses}</div>
+            <div style={styles.welcomeStatLabel}>Analyses en attente</div>
+          </div>
+          <div style={styles.welcomeStat}>
+            <div style={styles.welcomeStatValue}>{analyses?.length || 0}</div>
+            <div style={styles.welcomeStatLabel}>Total analyses</div>
+          </div>
+        </div>
       </div>
 
       {loading ? (
@@ -340,18 +489,14 @@ export function PatientDashboard() {
         <>
           {/* Info Cards */}
           <div style={styles.infoGrid}>
-            <Card>
-              <h4 style={{
-                fontSize: '16px',
-                fontWeight: 600,
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
-                <Icons.User size={18} />
-                Mes informations
-              </h4>
+            {/* My Health Info Card */}
+            <div style={styles.infoCard}>
+              <div style={styles.infoCardHeader}>
+                <div style={styles.infoCardIcon}>
+                  <Icons.Heart size={22} />
+                </div>
+                <span style={styles.infoCardTitle}>Mes informations de santé</span>
+              </div>
               {[
                 ['Date de naissance', profile.dob, <Icons.Calendar size={16} key="cal" />],
                 ['Téléphone', profile.phone_number, <Icons.Phone size={16} key="phone" />],
@@ -360,26 +505,22 @@ export function PatientDashboard() {
               ].map(([label, value, icon]) => value && (
                 <div key={label} style={styles.infoRow}>
                   <span style={styles.infoLabel}>
-                    {icon}
+                    <div style={styles.infoLabelIcon}>{icon}</div>
                     {label}
                   </span>
                   <span style={styles.infoValue}>{value}</span>
                 </div>
               ))}
-            </Card>
+            </div>
 
-            <Card>
-              <h4 style={{
-                fontSize: '16px',
-                fontWeight: 600,
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
-                <Icons.Zap size={18} />
-                Actions rapides
-              </h4>
+            {/* Quick Actions Card */}
+            <div style={styles.infoCard}>
+              <div style={styles.infoCardHeader}>
+                <div style={styles.infoCardIcon}>
+                  <Icons.Zap size={22} />
+                </div>
+                <span style={styles.infoCardTitle}>Accès rapide</span>
+              </div>
               <div style={styles.quickActionsGrid}>
                 {quickActions.map((action, index) => (
                   <button
@@ -387,18 +528,21 @@ export function PatientDashboard() {
                     style={styles.quickActionButton}
                     onClick={() => window.location.href = action.href}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--color-primary-300)';
-                      e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 12px 40px -10px rgba(5, 150, 105, 0.25)';
+                      e.currentTarget.style.borderColor = '#10b981';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--border-light)';
+                      e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = '#d1fae5';
                     }}
                   >
                     <div style={{
                       ...styles.quickActionIcon,
-                      background: action.color,
-                      color: action.iconColor,
+                      background: action.gradient,
+                      color: '#ffffff',
+                      boxShadow: '0 4px 12px -2px rgba(5, 150, 105, 0.3)',
                     }}>
                       {action.icon}
                     </div>
@@ -406,11 +550,13 @@ export function PatientDashboard() {
                       <div style={styles.quickActionTitle}>{action.title}</div>
                       <div style={styles.quickActionDesc}>{action.desc}</div>
                     </div>
-                    <Icons.ChevronRight size={18} style={{ color: 'var(--text-tertiary)' }} />
+                    <div style={styles.quickActionArrow}>
+                      <Icons.ChevronRight size={18} />
+                    </div>
                   </button>
                 ))}
               </div>
-            </Card>
+            </div>
           </div>
         </>
       )}
