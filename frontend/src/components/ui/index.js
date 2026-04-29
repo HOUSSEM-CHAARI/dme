@@ -857,7 +857,7 @@ export function Avatar({ name = '', src, size = 40, status }) {
 }
 
 // === StatCard Component ===
-export function StatCard({ label, value, icon: Icon, trend, trendValue, color = 'primary', loading = false }) {
+export function StatCard({ label, value, icon: Icon, iconSize = 24, trend, trendValue, color = 'primary', loading = false }) {
   const colors = {
     primary: { bg: 'var(--color-primary-50)', icon: 'var(--color-primary-500)', gradient: 'linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600))' },
     success: { bg: 'var(--color-success-50)', icon: 'var(--color-success-500)', gradient: 'linear-gradient(135deg, var(--color-success-500), var(--color-success-600))' },
@@ -906,7 +906,7 @@ export function StatCard({ label, value, icon: Icon, trend, trendValue, color = 
           justifyContent: 'center',
           boxShadow: `0 4px 12px ${c.icon}33`,
         }}>
-          {Icon && <Icon style={{ width: 24, height: 24, color: '#fff' }} />}
+          {Icon && <Icon style={{ width: iconSize, height: iconSize, color: '#fff' }} />}
         </div>
       </div>
     </Card>
@@ -1586,7 +1586,7 @@ export function Progress({ value = 0, max = 100, size = 'md', color = 'primary',
   );
 }
 
-export default {
+const UIComponents = {
   Icons,
   Button,
   Input,
@@ -1613,3 +1613,5 @@ export default {
   FileUpload,
   Progress,
 };
+
+export default UIComponents;

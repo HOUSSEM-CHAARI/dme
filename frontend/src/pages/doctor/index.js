@@ -287,28 +287,32 @@ export function DoctorDashboard() {
         <StatCard
           label="Total patients"
           value={loading ? '...' : stats?.total_patients ?? 0}
-          icon={<Icons.Users size={24} />}
+          icon={Icons.Users}
+          iconSize={24}
           color="var(--color-primary-600)"
           trend={stats?.patients_trend}
         />
         <StatCard
           label="Dossiers médicaux"
           value={loading ? '...' : stats?.total_records ?? 0}
-          icon={<Icons.FileText size={24} />}
+          icon={Icons.FileText}
+          iconSize={24}
           color="var(--color-secondary-600)"
           trend={stats?.records_trend}
         />
         <StatCard
           label="Ordonnances"
           value={loading ? '...' : stats?.total_prescriptions ?? 0}
-          icon={<Icons.Clipboard size={24} />}
+          icon={Icons.Clipboard}
+          iconSize={24}
           color="#7c3aed"
           trend={stats?.prescriptions_trend}
         />
         <StatCard
           label="Analyses"
           value={loading ? '...' : stats?.total_analyses ?? 0}
-          icon={<Icons.Activity size={24} />}
+          icon={Icons.Activity}
+          iconSize={24}
           color="#f59e0b"
           trend={stats?.analyses_trend}
         />

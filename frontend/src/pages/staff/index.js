@@ -98,21 +98,24 @@ export function StaffDashboard() {
         <StatCard
           label="Total patients"
           value={statsLoading ? '...' : stats?.total_patients ?? 0}
-          icon={<Icons.Users size={24} />}
+          icon={Icons.Users}
+          iconSize={24}
           color="var(--color-primary-600)"
           trend={stats?.patients_trend}
         />
         <StatCard
           label="Dossiers médicaux"
           value={statsLoading ? '...' : stats?.total_records ?? 0}
-          icon={<Icons.FileText size={24} />}
+          icon={Icons.FileText}
+          iconSize={24}
           color="var(--color-secondary-600)"
           trend={stats?.records_trend}
         />
         <StatCard
           label="Documents"
           value={statsLoading ? '...' : stats?.total_analyses ?? 0}
-          icon={<Icons.Folder size={24} />}
+          icon={Icons.Folder}
+          iconSize={24}
           color="#7c3aed"
           trend={stats?.documents_trend}
         />
