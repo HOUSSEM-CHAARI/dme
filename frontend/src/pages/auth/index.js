@@ -374,7 +374,7 @@ function AuthCard({ children }) {
           {FEATURES.map((feature, index) => (
             <div
               key={index}
-              style={styles.featureItem}
+              style={{...styles.featureItem, cursor: 'default'}}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
                 e.currentTarget.style.transform = 'translateX(8px)';
@@ -459,7 +459,7 @@ export function LoginPage() {
           placeholder="votre.email@exemple.com"
           value={form.email}
           onChange={handleChange('email')}
-          icon={<Icons.Mail size={18} />}
+          icon={Icons.Mail}
           required
         />
         <Input
@@ -468,7 +468,7 @@ export function LoginPage() {
           placeholder="Entrez votre mot de passe"
           value={form.password}
           onChange={handleChange('password')}
-          icon={<Icons.Lock size={18} />}
+          icon={Icons.Lock}
           required
         />
 
@@ -684,7 +684,7 @@ export function SignupPage() {
             value={form.email}
             onChange={handleChange('email')}
             error={errors.email}
-            icon={<Icons.Mail size={18} />}
+            icon={Icons.Mail}
           />
           <Input
             label="Mot de passe *"
@@ -693,7 +693,7 @@ export function SignupPage() {
             value={form.password}
             onChange={handleChange('password')}
             error={errors.password}
-            icon={<Icons.Lock size={18} />}
+            icon={Icons.Lock}
           />
           <Input
             label="Confirmer le mot de passe *"
@@ -702,7 +702,7 @@ export function SignupPage() {
             value={form.confirmPassword}
             onChange={handleChange('confirmPassword')}
             error={errors.confirmPassword}
-            icon={<Icons.Lock size={18} />}
+            icon={Icons.Lock}
           />
 
           <Button
@@ -757,7 +757,7 @@ export function SignupPage() {
             type="date"
             value={form.dob}
             onChange={handleChange('dob')}
-            icon={<Icons.Calendar size={18} />}
+            icon={Icons.Calendar}
           />
 
           <Input
@@ -765,7 +765,7 @@ export function SignupPage() {
             placeholder="+33 6 00 00 00 00"
             value={form.phone_number}
             onChange={handleChange('phone_number')}
-            icon={<Icons.Phone size={18} />}
+            icon={Icons.Phone}
           />
 
           {/* Doctor-specific fields */}
@@ -776,21 +776,21 @@ export function SignupPage() {
                 placeholder="Médecine générale"
                 value={form.specialization}
                 onChange={handleChange('specialization')}
-                icon={<Icons.Stethoscope size={18} />}
+                icon={Icons.Stethoscope}
               />
               <Input
                 label="Numéro de licence"
                 placeholder="MED-2024-XXX"
                 value={form.license_number}
                 onChange={handleChange('license_number')}
-                icon={<Icons.Award size={18} />}
+                icon={Icons.Award}
               />
               <Input
                 label="Établissement"
                 placeholder="Hôpital Saint-Louis"
                 value={form.hospital_affiliation}
                 onChange={handleChange('hospital_affiliation')}
-                icon={<Icons.Building size={18} />}
+                icon={Icons.Building}
               />
             </>
           )}
@@ -802,7 +802,7 @@ export function SignupPage() {
               placeholder="12 rue des Lilas, Paris"
               value={form.address}
               onChange={handleChange('address')}
-              icon={<Icons.MapPin size={18} />}
+              icon={Icons.MapPin}
             />
           )}
 

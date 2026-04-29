@@ -431,6 +431,17 @@ const styles = {
   },
 };
 
+// === Icon Rendering Helper ===
+/**
+ * Safely renders an icon whether it is a Component reference or a JSX element.
+ */
+const renderIcon = (icon, props = {}) => {
+  if (!icon) return null;
+  if (React.isValidElement(icon)) return icon;
+  const IconComponent = icon;
+  return <IconComponent {...props} />;
+};
+
 // === Button Component ===
 export function Button({
   children,
@@ -476,7 +487,7 @@ export function Button({
       }}
     >
       {loading && (
-        <span style={{
+        <span key="loader" style={{
           width: size === 'sm' ? 14 : 16,
           height: size === 'sm' ? 14 : 16,
           border: '2px solid currentColor',
@@ -485,9 +496,9 @@ export function Button({
           animation: 'spin 0.7s linear infinite',
         }} />
       )}
-      {!loading && Icon && iconPosition === 'left' && <Icon style={{ width: size === 'sm' ? 14 : 18, height: size === 'sm' ? 14 : 18 }} />}
+      {!loading && Icon && iconPosition === 'left' && renderIcon(Icon, { style: { width: size === 'sm' ? 14 : 18, height: size === 'sm' ? 14 : 18 } })}
       {children}
-      {!loading && Icon && iconPosition === 'right' && <Icon style={{ width: size === 'sm' ? 14 : 18, height: size === 'sm' ? 14 : 18 }} />}
+      {!loading && Icon && iconPosition === 'right' && renderIcon(Icon, { style: { width: size === 'sm' ? 14 : 18, height: size === 'sm' ? 14 : 18 } })}
     </button>
   );
 }
@@ -530,16 +541,15 @@ export function Input({
       )}
       <div style={{ position: 'relative' }}>
         {Icon && (
-          <Icon style={{
+          <div style={{
             position: 'absolute',
             left: '14px',
             top: '50%',
             transform: 'translateY(-50%)',
-            width: '18px',
-            height: '18px',
             color: focused ? 'var(--color-primary-500)' : 'var(--text-tertiary)',
             transition: 'color var(--transition-fast)',
-          }} />
+            display: 'flex'
+          }}>{renderIcon(Icon, { size: 18 })}</div>
         )}
         <input
           type={inputType}
@@ -906,7 +916,7 @@ export function StatCard({ label, value, icon: Icon, iconSize = 24, trend, trend
           justifyContent: 'center',
           boxShadow: `0 4px 12px ${c.icon}33`,
         }}>
-          {Icon && <Icon style={{ width: iconSize, height: iconSize, color: '#fff' }} />}
+          {renderIcon(Icon, { size: iconSize, style: { color: '#fff' } })}
         </div>
       </div>
     </Card>
@@ -1120,7 +1130,7 @@ export function Tabs({ tabs, active, onChange, style = {} }) {
             gap: '8px',
           }}
         >
-          {tab.icon && <tab.icon style={{ width: 16, height: 16 }} />}
+          {tab.icon && renderIcon(tab.icon, { size: 16 })}
           {tab.label}
           {tab.count !== undefined && (
             <Badge size="sm" variant={active === tab.key ? 'primary' : 'default'}>{tab.count}</Badge>
@@ -1149,7 +1159,7 @@ export function EmptyState({ icon: Icon = Icons.Folder, title, description, acti
         justifyContent: 'center',
         margin: '0 auto 20px',
       }}>
-        <Icon style={{ width: 36, height: 36, color: 'var(--text-tertiary)' }} />
+        {renderIcon(Icon, { size: 36, style: { color: 'var(--text-tertiary)' } })}
       </div>
       {title && (
         <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '8px' }}>
